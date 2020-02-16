@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_margin="0dp"
+    android:layout_height="match_parent"
+    tools:context=".activity.CommandListActivity">
+
+    <LinearLayout
+        android:layout_gravity="left"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/linear"
+        android:id="@+id/relative"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Linear Solenoid "
+            android:textSize="35sp" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status:"
+            android:textSize="20sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="extand"
+            android:textSize="18sp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear2"
+        app:layout_constraintTop_toBottomOf="@+id/relative"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/linear"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Schedule Command"
+            android:textSize="24sp" />
+        <ImageButton
+            android:id="@+id/imageButton4"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/add" />
+    </LinearLayout>
+    <LinearLayout
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/linear"
+        app:layout_constraintTop_toBottomOf="@+id/linear2"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/imageButton5"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/delete"/>
+
+        <ImageButton
+            android:id="@+id/button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="11dp"
+            android:layout_marginRight="11dp"
+            android:background="@drawable/edit"/>
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="extend at 9:30 PM on sun"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+    </LinearLayout>
+    <ListView
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear"
+        android:id="@+id/commands"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
