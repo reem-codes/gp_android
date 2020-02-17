@@ -2,11 +2,23 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="0dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:background="@color/green"
     tools:context=".activity.LoginActivity">
+    <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/linear"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        style="@style/loginLogo"
+        android:gravity="center"
+        android:text="My\nSmart\nHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <LinearLayout
+        android:id="@+id/linear"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -15,29 +27,43 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <EditText
+            style="@style/editTextLogin"
             android:id="@+id/email"
-            android:width="250dp"
             android:hint="Email"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <EditText
+            style="@style/editTextLogin"
             android:id="@+id/password"
-            android:width="250dp"
             android:hint="Password"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <Button
+            android:shadowColor="@color/colorAccent"
+            style="@style/button"
             android:onClick="login"
             android:layout_gravity="end"
             android:text="Login"
+            android:stateListAnimator="@null"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
         <TextView
+            android:textStyle="bold"
+            android:textColor="@color/white"
             android:id="@+id/registerPage"
             android:layout_gravity="center"
             android:text="Don't have an account? Register here!"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
+    <ImageView
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:src="@drawable/house"
+        android:scaleType="fitEnd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

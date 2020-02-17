@@ -8,6 +8,8 @@ import android.widget.ListView;
 
 import com.reem_codes.gp_android.R;
 import com.reem_codes.gp_android.adapter.CommandAdapter;
+import com.reem_codes.gp_android.model.Command;
+import com.reem_codes.gp_android.model.Schedule;
 import com.reem_codes.gp_android.model.User;
 
 import java.util.ArrayList;
@@ -20,13 +22,19 @@ public class CommandListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_command_list);
 
-        List<User> commands = new ArrayList<>();
-        commands.add(new User("reem@reem.com", "123425", 1));
-        commands.add(new User("nouf@reem.com", "3grty", 2));
-        commands.add(new User("sara@reem.com", "etyr5ge", 3));
-        commands.add(new User("abeer@reem.com", "545", 4));
-        commands.add(new User("mona@reem.com", "12etrhv3425", 5));
-        commands.add(new User("doha@reem.com", "dfhvh", 6));
+        List<Command> commands = new ArrayList<>();
+        commands.add(new Command(1, "2020-01-01", new Schedule(1, 102, "9:30 AM", "345"), true));
+        commands.add(new Command(2, "2020-01-01", new Schedule(2, 127, "10:45 PM", "345"), true));
+        commands.add(new Command(3, "2020-01-01", new Schedule(3, 1, "1:00 AM", "345"), false));
+        commands.add(new Command(4, "2020-01-01", new Schedule(4, 105, "5:15 AM", "345"), true));
+        commands.add(new Command(5, "2020-01-01", new Schedule(5, 86, "6:20 AM", "345"), false));
+        commands.add(new Command(5, "2020-01-01", new Schedule(6, 85, "2:13 AM", "345"), false));
+        commands.add(new Command(5, "2020-01-01", new Schedule(7, 87, "7:55 AM", "345"), false));
+        commands.add(new Command(5, "2020-01-01", new Schedule(8, 33, "8:35 AM", "345"), false));
+        commands.add(new Command(5, "2020-01-01", new Schedule(9, 13, "3:40 AM", "345"), false));
+        commands.add(new Command(5, "2020-01-01", new Schedule(10, 16, "11:17 AM", "345"), false));
+        commands.add(new Command(5, "2020-01-01", new Schedule(1, 18, "12:44 AM", "345"), false));
+
         ListView listView = (ListView) findViewById(R.id.commands);
         ArrayAdapter arrayAdapter = new CommandAdapter(this, commands);
         listView.setAdapter(arrayAdapter);

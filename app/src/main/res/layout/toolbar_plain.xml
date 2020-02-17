@@ -1,0 +1,18 @@
+<android.support.v7.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar_top"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:minHeight="?attr/actionBarSize"
+    android:background="@color/green"
+    app:theme="@style/AppTheme" >
+    <TextView
+        android:textSize="32dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My Smart Home"
+        android:layout_gravity="center"
+        android:id="@+id/toolbar_title" />
+
+</android.support.v7.widget.Toolbar>
