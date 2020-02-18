@@ -25,9 +25,9 @@ public class LoginActivity extends AppCompatActivity {
         /* CALL API */
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("email", email.getText().toString());
-        intent.putExtra("password", password.getText().toString());
-        startActivity(intent);
+//        Intent intent = new Intent(this, MainActivity.class);
+//        intent.putExtra("email", email.getText().toString());
+//        intent.putExtra("password", password.getText().toString());
+//        startActivity(intent);
     }
 }

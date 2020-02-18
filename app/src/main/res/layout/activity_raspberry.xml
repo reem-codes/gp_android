@@ -49,27 +49,14 @@
             android:background="@drawable/add" />
     </LinearLayout>
 
-    <LinearLayout
+    <ListView
+        android:id="@+id/raspberries"
         android:layout_margin="24dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearTop"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageButton
-            android:layout_marginRight="24dp"
-            android:id="@+id/DeletRaspberry"
-            style="@style/icons"
-            android:background="@drawable/delete" />
-
-        <TextView
-            android:textSize="20sp"
-            android:id="@+id/raspberry"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Raspberry_1"
-             />
-    </LinearLayout>
+        android:layout_height="wrap_content" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
