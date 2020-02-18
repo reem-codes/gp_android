@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 
 import com.reem_codes.gp_android.R;
 import com.reem_codes.gp_android.model.Command;
-import com.reem_codes.gp_android.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +61,7 @@ public class CommandAdapter extends ArrayAdapter<Command> {
             }
         }
 
-        String configString = String.format("%s at %s on %s", command.isOn()? "ON" : "Off", command.getSchedule().getTime(), days);
+        String configString = String.format("%s at %s on %s", command.isConfiguration()? "ON" : "OFF", command.getSchedule().getTime(), days);
         config.setText(configString);
 
         delete.setOnClickListener(new View.OnClickListener() {

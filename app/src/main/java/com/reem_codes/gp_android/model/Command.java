@@ -6,7 +6,7 @@ public class Command {
     private String updateAt ;
 
     private Schedule schedule;
-    private boolean isOn;
+    private boolean configuration;
 
     public Command() {
 
@@ -17,7 +17,7 @@ public class Command {
         this.id = id;
         this.updateAt = updateAt;
         this.schedule = schedule;
-        this.isOn = isOn;
+        this.configuration = isOn;
     }
 
     public String getUpdateAt() {
@@ -44,11 +44,11 @@ public class Command {
         this.schedule = schedule;
     }
 
-    public boolean isOn() {
-        return isOn;
+    public boolean isConfiguration() {
+        return configuration;
     }
 
-    public void setOn(boolean on) {
-        isOn = on;
+    public void setConfiguration(boolean configuration) {
+        this.configuration = configuration;
     }
 }
