@@ -18,6 +18,7 @@ import com.reem_codes.gp_android.model.Command;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class CommandAdapter extends ArrayAdapter<Command> {
     Context context;
     public CommandAdapter(Context context, List<Command> commands) {
@@ -31,14 +32,20 @@ public class CommandAdapter extends ArrayAdapter<Command> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
+        // specify each item's layout
         View item = inflater.inflate(R.layout.command_item_adapter, parent, false);
 
-
+        // get the current command from the list passed to the adapter
         final Command command = getItem(position);
-        final TextView config = (TextView) item.findViewById(R.id.config);
 
+        // take the views from the layout
+        final TextView config = (TextView) item.findViewById(R.id.config);
         ImageButton delete = (ImageButton) item.findViewById(R.id.delete);
         ImageButton edit = (ImageButton) item.findViewById(R.id.edit);
+
+        /* This is the code to turn the days integer value into binary,
+        then into an array of on positions representing the days in which the command is to be executed
+         */
         ArrayList<Integer> positions = intToBinaryPositions(command.getSchedule().getDays());
         String days = "";
         if(positions.size() == 7) {
@@ -61,15 +68,19 @@ public class CommandAdapter extends ArrayAdapter<Command> {
             }
         }
 
+        // make the config string and set the view text to the string
         String configString = String.format("%s at %s on %s", command.isConfiguration()? "ON" : "OFF", command.getSchedule().getTime(), days);
         config.setText(configString);
 
+        // if the user clicked on delete button, call the API to delete it
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(context, "Are you sure?", Toast.LENGTH_LONG).show();
             }
         });
+
+        // if the user clicked on the edit button, open the commandActivity
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,7 +89,12 @@ public class CommandAdapter extends ArrayAdapter<Command> {
         });
         return item;
     }
+
     public static ArrayList<Integer> intToBinaryPositions(int x){
+        /**
+         * This method takes an integer number,
+         * converts it to binary
+         * and then returns an array of on positions */
         String binary = Integer.toBinaryString(x);
         ArrayList<Integer> positions = new ArrayList<>();
         for(int i = 0; i < binary.length(); i++){

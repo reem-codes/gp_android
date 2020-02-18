@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.reem_codes.gp_android">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:screenOrientation="portrait"
         android:allowBackup="true"
@@ -18,17 +20,17 @@
         </activity>
 
         <activity android:name=".activity.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
             android:parentActivityName=".activity.MainActivity"
             android:windowSoftInputMode="adjustResize|stateHidden|adjustPan"
             android:name=".activity.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity

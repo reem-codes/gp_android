@@ -32,16 +32,20 @@ public class RaspberryAdapter extends ArrayAdapter<Raspberry> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
+        // specify each item's layout
         View item = inflater.inflate(R.layout.raspberry_item_adapter, parent, false);
 
-
+        // get the current raspberry object
         final Raspberry raspberry = getItem(position);
-        final TextView name = (TextView) item.findViewById(R.id.raspberry);
 
+        // take the views from the layout
+        final TextView name = (TextView) item.findViewById(R.id.raspberry);
         ImageButton delete = (ImageButton) item.findViewById(R.id.delete_raspberry);
 
+        // set the nameview to take the current raspberry's name
         name.setText(raspberry.getName());
 
+        // in case the user clicks the delete button: delete from the web server
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

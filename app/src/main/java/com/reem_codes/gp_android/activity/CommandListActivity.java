@@ -22,6 +22,9 @@ public class CommandListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_command_list);
 
+        /* list of commands
+        TODO: get list from server
+         */
         List<Command> commands = new ArrayList<>();
         commands.add(new Command(1, "2020-01-01", new Schedule(1, 102, "9:30 AM", "345"), true));
         commands.add(new Command(2, "2020-01-01", new Schedule(2, 127, "10:45 PM", "345"), true));
@@ -35,8 +38,11 @@ public class CommandListActivity extends AppCompatActivity {
         commands.add(new Command(5, "2020-01-01", new Schedule(10, 16, "11:17 AM", "345"), false));
         commands.add(new Command(5, "2020-01-01", new Schedule(1, 18, "12:44 AM", "345"), false));
 
+        // get the listview
         ListView listView = (ListView) findViewById(R.id.commands);
+        // make an array adapter for the listview of an object of type array adabter
         ArrayAdapter arrayAdapter = new CommandAdapter(this, commands);
+        // set the array adapter to the listview
         listView.setAdapter(arrayAdapter);
     }
 }
