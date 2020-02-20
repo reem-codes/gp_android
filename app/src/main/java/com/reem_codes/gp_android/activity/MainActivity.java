@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         Button login = (Button) findViewById(R.id.login);
         Button raspberry = (Button) findViewById(R.id.raspberry);
         Button command = (Button) findViewById(R.id.command);
+        Button hardware = (Button) findViewById(R.id.hardware);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,6 +39,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), CommandListActivity.class);
+                startActivity(intent);
+            }
+        });
+        hardware.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), HardwareListActivity.class);
                 startActivity(intent);
             }
         });

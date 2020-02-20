@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    android:layout_width="100dp"
+    android:layout_height="150dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="6dp"
+    app:strokeColor="@color/pink"
+    app:strokeWidth="3dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:src="@drawable/light"
+            android:layout_width="45dp"
+            android:layout_height="45dp">
+        </ImageView>
+
+        <TextView
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:layout_weight="2"
+            android:id="@+id/name"
+            android:layout_marginTop="12dp"
+            android:textSize="18sp"
+            android:text="Lighting Lighting  Lighting Lighting Lighting Lighting Lighting Lighting Lighting Lighting Lighting"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </TextView>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

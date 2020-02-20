@@ -6,7 +6,7 @@
         <item name="titleTextColor">@color/white</item>
         <item name="android:layout_gravity">center</item>
         <item name="colorPrimary">@color/green</item>
-        <item name="colorPrimaryDark">@color/darkGreen</item>
+        <item name="colorPrimaryDark">@color/green</item>
         <item name="colorAccent">@color/pink</item>
     </style>
 

@@ -1,4 +1,5 @@
-<android.support.v7.widget.Toolbar
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar_top"
@@ -8,11 +9,11 @@
     android:background="@color/green"
     app:theme="@style/AppTheme" >
     <TextView
-        android:textSize="32dp"
+        android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="My Smart Home"
         android:layout_gravity="center"
         android:id="@+id/toolbar_title" />
 
-</android.support.v7.widget.Toolbar>
+</androidx.appcompat.widget.Toolbar>

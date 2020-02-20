@@ -2,41 +2,40 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.reem_codes.gp_android">
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:screenOrientation="portrait"
+        tools:replace="android:label"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="My Smart Home"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar.FullScreen"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:parentActivityName=".activity.MainActivity"
-            android:name=".activity.CommandListActivity">
-        </activity>
-
-        <activity android:name=".activity.MainActivity">
-        </activity>
-
+            android:name=".activity.HardwareListActivity" />
         <activity
-            android:parentActivityName=".activity.MainActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden|adjustPan"
-            android:name=".activity.LoginActivity">
+            android:name=".activity.CommandListActivity"
+            android:parentActivityName=".activity.MainActivity" />
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
+            android:name=".activity.LoginActivity"
             android:parentActivityName=".activity.MainActivity"
-            android:name=".activity.RaspberryActivity">
-        </activity>
+            android:windowSoftInputMode="adjustResize|stateHidden|adjustPan"/>
+        <activity
+            android:name=".activity.RaspberryActivity"
+            android:parentActivityName=".activity.MainActivity"/>
+
     </application>
 
 </manifest>
