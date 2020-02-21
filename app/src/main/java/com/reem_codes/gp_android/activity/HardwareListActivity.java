@@ -3,16 +3,20 @@ package com.reem_codes.gp_android.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.reem_codes.gp_android.adapter.CommandAdapter;
@@ -32,13 +36,21 @@ public class HardwareListActivity extends AppCompatActivity {
 
     SliderView sliderView;
     SliderAdapterExample adapter;
-
+    public static List<Hardware> hardwares;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hardware_list);
-        TextView toolbarText = (TextView) findViewById(R.id.toolbar_title);
-        toolbarText.setText("Hardware List");
+
+
+        Intent intent = getIntent();
+        int raspberry_id = intent.getIntExtra("raspberry_index", -1);
+        if(raspberry_id != -1) {
+            Toast.makeText(this, "the raspberry clicked is " + RaspberryActivity.raspberries.get(raspberry_id).getName(), Toast.LENGTH_LONG).show();
+            TextView toolbarText = (TextView) findViewById(R.id.toolbar_title);
+            toolbarText.setText(RaspberryActivity.raspberries.get(raspberry_id).getName() + "'s Hardware List");
+
+        }
 
         /* Slider view configuration **/
         sliderView = findViewById(R.id.imageSlider);
@@ -54,7 +66,7 @@ public class HardwareListActivity extends AppCompatActivity {
         sliderView.startAutoCycle();
 
         // make mock hardware list
-        List<Hardware> hardwares = new ArrayList<>();
+        hardwares = new ArrayList<>();
         hardwares.add(new Hardware(1, "et", "led", "light", "led on my room", 11, 1, true));
         hardwares.add(new Hardware(2, "et", "solenoid", "electric", "AC on my room", 13, 1, false));
         hardwares.add(new Hardware(3, "et", "camera", "security", "garage camera", 13, 2, true));
@@ -67,6 +79,16 @@ public class HardwareListActivity extends AppCompatActivity {
         ArrayAdapter arrayAdapter = new HardwareAdapter(this, hardwares);
         // set the array adapter to the gridview
         gridView.setAdapter(arrayAdapter);
+
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getApplicationContext(), CommandListActivity.class);
+                intent.putExtra("hardware_index", i);
+                startActivity(intent);
+            }
+        });
 
     }
 }

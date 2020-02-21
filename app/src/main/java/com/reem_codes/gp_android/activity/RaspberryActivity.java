@@ -2,13 +2,18 @@ package com.reem_codes.gp_android.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.reem_codes.gp_android.R;
 import com.reem_codes.gp_android.adapter.RaspberryAdapter;
+import com.reem_codes.gp_android.model.Hardware;
 import com.reem_codes.gp_android.model.Raspberry;
 
 import java.util.ArrayList;
@@ -16,6 +21,7 @@ import java.util.List;
 
 public class RaspberryActivity extends AppCompatActivity {
 
+    public static List<Raspberry> raspberries;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +32,7 @@ public class RaspberryActivity extends AppCompatActivity {
         /* create a mock list
         TODO: take the arraylist from the api
          */
-        List<Raspberry> raspberries= new ArrayList<>();
+        raspberries= new ArrayList<>();
         raspberries.add(new Raspberry(1, "raspberry 1", "9878y"));
         raspberries.add(new Raspberry(2, "my room", "9878y"));
         raspberries.add(new Raspberry(3, "family home", "9878y"));
@@ -34,8 +40,17 @@ public class RaspberryActivity extends AppCompatActivity {
         // take the listview
         ListView listView = (ListView) findViewById(R.id.raspberries);
         // make a raspberry adapter
-        ArrayAdapter arrayAdapter = new RaspberryAdapter(this, raspberries);
+        ArrayAdapter arrayAdapter = new RaspberryAdapter(this, raspberries, listView);
         // set the listview's adapter to the raspberry one
         listView.setAdapter(arrayAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getApplicationContext(), HardwareListActivity.class);
+                intent.putExtra("raspberry_index", i);
+                startActivity(intent);
+            }
+        });
     }
 }

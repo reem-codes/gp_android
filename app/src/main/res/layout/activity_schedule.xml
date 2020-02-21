@@ -49,13 +49,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <EditText
+                android:text="9"
                 android:gravity="center"
                 android:id="@+id/hour"
                 android:hint="hour"
                 android:inputType="number"
                 android:layout_width="65dp"
                 android:layout_height="wrap_content"/>
+            <TextView
+                android:text=":"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
             <EditText
+                android:text="30"
                 android:gravity="center"
                 android:id="@+id/min"
                 android:hint="minute"
@@ -68,6 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <RadioButton
+                    android:checked="true"
                     android:id="@+id/am"
                     android:text="AM"
                     android:layout_width="wrap_content"
@@ -119,6 +126,7 @@
                 android:id="@+id/sun"/>
         </com.google.android.flexbox.FlexboxLayout>
         <Button
+            android:id="@+id/done"
             android:text="Done"
             style="@style/button"
             android:layout_width="wrap_content"

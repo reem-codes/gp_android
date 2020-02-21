@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.reem_codes.gp_android.R;
+import com.reem_codes.gp_android.activity.CommandListActivity;
+import com.reem_codes.gp_android.activity.RaspberryActivity;
 import com.reem_codes.gp_android.model.Command;
 
 import java.util.ArrayList;
@@ -21,22 +24,26 @@ import java.util.List;
 
 public class CommandAdapter extends ArrayAdapter<Command> {
     Context context;
-    public CommandAdapter(Context context, List<Command> commands) {
+    static Command command;
+    ListView listView;
+    public CommandAdapter(Context context, List<Command> commands, ListView listView) {
         super(context, R.layout.command_item_adapter, commands);
         this.context = context;
+        this.listView = listView;
+
 
     }
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
         // specify each item's layout
         View item = inflater.inflate(R.layout.command_item_adapter, parent, false);
 
         // get the current command from the list passed to the adapter
-        final Command command = getItem(position);
+        command = getItem(position);
 
         // take the views from the layout
         final TextView config = (TextView) item.findViewById(R.id.config);
@@ -76,7 +83,11 @@ public class CommandAdapter extends ArrayAdapter<Command> {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "Are you sure?", Toast.LENGTH_LONG).show();
+                command = getItem(position);
+                Toast.makeText(context, command.getId() + " was successfully deleted", Toast.LENGTH_LONG).show();
+                CommandListActivity.commands.remove(command);
+                remove(command);
+                listView.invalidate();
             }
         });
 

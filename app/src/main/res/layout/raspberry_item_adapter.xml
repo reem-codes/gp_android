@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:descendantFocusability="blocksDescendants"
     android:padding="8dp"
     android:layout_marginBottom="8dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
