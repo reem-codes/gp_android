@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.reem_codes.gp_android.R;
 
@@ -20,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         Button raspberry = (Button) findViewById(R.id.raspberry);
         Button command = (Button) findViewById(R.id.command);
         Button hardware = (Button) findViewById(R.id.hardware);
+        Button addCommand = (Button) findViewById(R.id.add_command);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +46,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), HardwareListActivity.class);
+                startActivity(intent);
+            }
+        });
+        addCommand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), NewCommandActivity.class);
                 startActivity(intent);
             }
         });

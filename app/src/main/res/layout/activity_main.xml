@@ -36,4 +36,12 @@
         android:text="Hardware"
         android:layout_width="150dp"
         android:layout_height="wrap_content" />
+    <Button
+        android:layout_below="@id/command"
+        android:layout_alignParentLeft="true"
+        style="@style/button"
+        android:id="@+id/add_command"
+        android:text="Add Command"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content" />
 </RelativeLayout>
