@@ -10,12 +10,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
-import androidx.core.widget.TextViewCompat;
-import android.widget.TextView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.widget.Toast;
+import com.google.android.flexbox.AlignItems;
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexWrap;
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.flexbox.JustifyContent;
 import com.reem_codes.gp_android.R;
-
-import java.util.ArrayList;
+import com.reem_codes.gp_android.adapter.DayAdapter;
 
 public class ScheduleActivity extends AppCompatActivity {
 
@@ -24,8 +27,7 @@ public class ScheduleActivity extends AppCompatActivity {
     int hour, minute;
     boolean isAM;
 
-    static boolean[] isSelected = {false, false, false, false, false, false, false};
-    boolean[] days = new boolean[7];
+    public static boolean[] isSelected = {false, false, false, false, false, false, false};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,14 +37,21 @@ public class ScheduleActivity extends AppCompatActivity {
         minuteEdit = (EditText) findViewById(R.id.min);
         am = (RadioButton) findViewById(R.id.am);
 
-        TextView mon = (TextView) findViewById(R.id.mon);
-        mon.setBackground(getResources().getDrawable(R.drawable.days_off));
-        mon.setTextColor(getResources().getColor(android.R.color.darker_gray));
 
+        /*
+        app:flexWrap="wrap"
+            app:justifyContent="space_around"
+            app:alignItems="center"
+            app:alignContent="center"
+         */
+        FlexboxLayoutManager manager = new FlexboxLayoutManager(this, FlexDirection.ROW);
+        manager.setJustifyContent(JustifyContent.SPACE_AROUND);
+        manager.setFlexWrap(FlexWrap.WRAP);
+        manager.setAlignItems(AlignItems.CENTER);
 
-        TextView tues = (TextView) findViewById(R.id.tues);
-        tues.setBackground(getResources().getDrawable(R.drawable.days_on));
-        tues.setTextColor(getResources().getColor(R.color.white));
+        RecyclerView recycler = (RecyclerView) findViewById(R.id.days);
+        recycler.setLayoutManager(manager);
+        recycler.setAdapter(new DayAdapter(this));
 
 
         ImageButton close = (ImageButton) findViewById(R.id.close);
@@ -80,12 +89,24 @@ public class ScheduleActivity extends AppCompatActivity {
                     return;
 
                 }
+                int countOn = 0;
+                for(boolean day : isSelected) {
+                    if(day){
+                        countOn++;
+                    }
+                }
+                if(countOn == 0){
+                    Toast.makeText(getApplicationContext(), "You must select one day at east", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
 
                 isAM = am.isChecked();
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("hour", hour);
                 returnIntent.putExtra("minute", minute);
                 returnIntent.putExtra("isAM", isAM);
+                returnIntent.putExtra("days", isSelected);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }

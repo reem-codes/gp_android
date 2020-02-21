@@ -21,6 +21,8 @@ import com.reem_codes.gp_android.model.User;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.reem_codes.gp_android.adapter.DayAdapter.days;
+
 public class CommandListActivity extends AppCompatActivity {
 
     public static List<Command> commands;
@@ -80,7 +82,24 @@ public class CommandListActivity extends AppCompatActivity {
         if (requestCode == LAUNCH_ADD_COMMAND) {
             if (resultCode == Activity.RESULT_OK) {
                 boolean config = data.getBooleanExtra("config", true);
-                Toast.makeText(this, config? "ON":"OFF", Toast.LENGTH_LONG).show();
+                boolean isScheduled = data.getBooleanExtra("isScheduled", false);
+
+                String text = config? "ON":"OFF";
+                if(isScheduled) {
+                    boolean isAM = data.getBooleanExtra("isAM", true);
+                    int hour = data.getIntExtra("hour", -1);
+                    int minute = data.getIntExtra("minute", -1);
+                    boolean[] isSelected = data.getBooleanArrayExtra("days");
+
+                    String daysString ="";
+                    for(int i = 0; i < isSelected.length; i++){
+                        if(ScheduleActivity.isSelected[i]){
+                            daysString += days[i] + " ";
+                        }
+                    }
+                    text += String.format(" %s. %d:%d\n%s", isAM? "AM":"PM", hour, minute, daysString);
+                }
+                Toast.makeText(this, text, Toast.LENGTH_LONG).show();
 
             }
             if (resultCode == Activity.RESULT_CANCELED) {

@@ -22,11 +22,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.reem_codes.gp_android.adapter.DayAdapter.days;
+
 
 public class NewCommandActivity extends Activity {
     final int LAUNCH_ADD_SCHEDULE = 2;
 
     boolean isOn = true;
+    boolean isAM, isScheduled;
+    int hour, minute;
+    boolean[] isSelected;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,9 +61,9 @@ public class NewCommandActivity extends Activity {
                 // If user change the default selection
                 // First item is disable and it is used for hint
                 // Notify the selected item text
-                Toast.makeText
-                        (getApplicationContext(), "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
-                        .show();
+//                Toast.makeText
+//                        (getApplicationContext(), "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
+//                        .show();
                 isOn = position == 0;
 
             }
@@ -85,6 +90,14 @@ public class NewCommandActivity extends Activity {
             public void onClick(View view) {
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("config", isOn);
+                if(isScheduled){
+                    returnIntent.putExtra("isScheduled", isScheduled);
+                    returnIntent.putExtra("isAM", isAM);
+                    returnIntent.putExtra("hour", hour);
+                    returnIntent.putExtra("minute", minute);
+                    returnIntent.putExtra("days", isSelected);
+                }
+
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }
@@ -105,11 +118,13 @@ public class NewCommandActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == LAUNCH_ADD_SCHEDULE) {
             if (resultCode == Activity.RESULT_OK) {
-                boolean isAM = data.getBooleanExtra("isAM", true);
-                int hour = data.getIntExtra("hour", -1);
-                int minute = data.getIntExtra("minute", -1);
-                Toast.makeText(this, String.format("%s. %d:%d", isAM? "AM":"PM", hour, minute), Toast.LENGTH_LONG).show();
+                isScheduled = true;
+                isAM = data.getBooleanExtra("isAM", true);
+                hour = data.getIntExtra("hour", -1);
+                minute = data.getIntExtra("minute", -1);
+                isSelected = data.getBooleanArrayExtra("days");
 
+                Toast.makeText(this, "Schedule added", Toast.LENGTH_LONG).show();
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 Toast.makeText(this, "no schedule added", Toast.LENGTH_LONG).show();

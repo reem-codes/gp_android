@@ -16,7 +16,8 @@
         android:theme="@style/AppTheme.NoActionBar.FullScreen"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:label">
-        <activity android:name=".activity.ScheduleActivity"/>
+        <activity android:name=".activity.ScheduleActivity">
+        </activity>
         <activity android:name=".activity.HardwareListActivity"/>
         <activity
             android:name=".activity.CommandListActivity"/>

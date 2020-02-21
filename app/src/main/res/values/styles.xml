@@ -62,7 +62,8 @@
         <item name="android:layout_width">50dp</item>
         <item name="android:layout_height">50dp</item>
         <item name="android:background">@drawable/days_off</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">16sp</item>darker_gray
+        <item name="android:textColor">@android:color/darker_gray</item>
     </style>
     <style name="days_on" parent="days">
         <item name="android:background">@drawable/days_on</item>

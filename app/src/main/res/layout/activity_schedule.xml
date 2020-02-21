@@ -86,45 +86,10 @@
                     android:layout_height="wrap_content"/>
             </RadioGroup>
         </LinearLayout>
-        <com.google.android.flexbox.FlexboxLayout
-            android:layout_margin="16dp"
-            android:padding="16dp"
-            android:id="@+id/flexbox"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/days"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:flexWrap="wrap"
-            app:justifyContent="space_around"
-            app:alignItems="center"
-            app:alignContent="center" >
-            <TextView
-                style="@style/days_on"
-                android:text="Mon"
-                android:id="@+id/mon" />
-            <TextView
-                style="@style/days"
-                android:text="Tues"
-                android:id="@+id/tues" />
-            <TextView
-                style="@style/days"
-                android:text="Wed"
-                android:id="@+id/wed" />
-            <TextView
-                android:gravity="center"
-                style="@style/days"
-                android:text="Thurs" />
-            <TextView
-                style="@style/days"
-                android:text="Fri"
-                android:id="@+id/fri" />
-            <TextView
-                style="@style/days"
-                android:text="Sat"
-                android:id="@+id/sat" />
-            <TextView
-                style="@style/days"
-                android:text="Sun"
-                android:id="@+id/sun"/>
-        </com.google.android.flexbox.FlexboxLayout>
+            android:layout_height="wrap_content"/>
         <Button
             android:id="@+id/done"
             android:text="Done"
