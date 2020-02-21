@@ -132,7 +132,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
                     // direct user to main page
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), RaspberryActivity.class);
                     startActivity(intent);
                 }
                 // final else: if there is no error message and no token: something is wrong. Tell the user to retry

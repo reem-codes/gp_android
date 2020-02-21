@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.reem_codes.gp_android.R;
+import com.reem_codes.gp_android.model.Schedule;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         Button command = (Button) findViewById(R.id.command);
         Button hardware = (Button) findViewById(R.id.hardware);
         Button addCommand = (Button) findViewById(R.id.add_command);
+        Button schedule = (Button) findViewById(R.id.schedule);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +55,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), NewCommandActivity.class);
+                startActivity(intent);
+            }
+        });
+        schedule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), ScheduleActivity.class);
                 startActivity(intent);
             }
         });

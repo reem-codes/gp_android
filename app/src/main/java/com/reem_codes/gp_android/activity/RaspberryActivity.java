@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.reem_codes.gp_android.R;
 import com.reem_codes.gp_android.adapter.RaspberryAdapter;
@@ -19,6 +20,8 @@ public class RaspberryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_raspberry);
+        TextView toolbarText = (TextView) findViewById(R.id.toolbar_title);
+        toolbarText.setText("Raspberry List");
 
         /* create a mock list
         TODO: take the arraylist from the api

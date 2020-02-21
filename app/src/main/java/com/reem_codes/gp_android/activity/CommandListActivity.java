@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.reem_codes.gp_android.R;
 import com.reem_codes.gp_android.adapter.CommandAdapter;
@@ -21,6 +22,8 @@ public class CommandListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_command_list);
+        TextView toolbarText = (TextView) findViewById(R.id.toolbar_title);
+        toolbarText.setText("Command List");
 
         /* list of commands
         TODO: get list from server

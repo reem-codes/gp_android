@@ -9,6 +9,7 @@
     <color name="faintPink">#FEF9F9</color>
     <color name="white">#fefefe</color>
     <color name="black">#202020</color>
+    <color name="gray">#D3D3D3</color>
     <color name="darkGreen">#3E7767</color>
 
 </resources>

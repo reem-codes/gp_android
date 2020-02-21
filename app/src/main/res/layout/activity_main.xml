@@ -44,4 +44,12 @@
         android:text="Add Command"
         android:layout_width="150dp"
         android:layout_height="wrap_content" />
+    <Button
+        android:layout_below="@id/hardware"
+        android:layout_toRightOf="@id/add_command"
+        style="@style/button"
+        android:id="@+id/schedule"
+        android:text="schedule"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content" />
 </RelativeLayout>

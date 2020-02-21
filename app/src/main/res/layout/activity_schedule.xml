@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".activity.ScheduleActivity">
+    <androidx.appcompat.widget.Toolbar
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar_top"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/green"
+        app:theme="@style/AppTheme" >
+        <ImageButton
+            android:id="@+id/close"
+            style="@style/icons"
+            android:layout_gravity="start"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/close"/>
+        <TextView
+            android:gravity="left"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose Schedule"
+            android:layout_gravity="center"
+            android:id="@+id/toolbar_title" />
+
+    </androidx.appcompat.widget.Toolbar>
+    <LinearLayout
+        android:layout_margin="16dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:gravity="center"
+                android:id="@+id/hour"
+                android:hint="hour"
+                android:inputType="number"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"/>
+            <EditText
+                android:gravity="center"
+                android:id="@+id/min"
+                android:hint="minute"
+                android:inputType="number"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"/>
+            <RadioGroup
+                android:orientation="horizontal"
+                android:id="@+id/ap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <RadioButton
+                    android:id="@+id/am"
+                    android:text="AM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <RadioButton
+                    android:id="@+id/pm"
+                    android:text="PM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RadioGroup>
+        </LinearLayout>
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_margin="16dp"
+            android:padding="16dp"
+            android:id="@+id/flexbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:flexWrap="wrap"
+            app:justifyContent="space_around"
+            app:alignItems="center"
+            app:alignContent="center" >
+            <TextView
+                style="@style/days_on"
+                android:text="Mon"
+                android:id="@+id/mon" />
+            <TextView
+                style="@style/days"
+                android:text="Tues"
+                android:id="@+id/tues" />
+            <TextView
+                style="@style/days"
+                android:text="Wed"
+                android:id="@+id/wed" />
+            <TextView
+                android:gravity="center"
+                style="@style/days"
+                android:text="Thurs" />
+            <TextView
+                style="@style/days"
+                android:text="Fri"
+                android:id="@+id/fri" />
+            <TextView
+                style="@style/days"
+                android:text="Sat"
+                android:id="@+id/sat" />
+            <TextView
+                style="@style/days"
+                android:text="Sun"
+                android:id="@+id/sun"/>
+        </com.google.android.flexbox.FlexboxLayout>
+        <Button
+            android:text="Done"
+            style="@style/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>
