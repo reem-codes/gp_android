@@ -3,23 +3,20 @@ package com.reem_codes.gp_android.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
 
 import android.graphics.Color;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.GridLayout;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.reem_codes.gp_android.adapter.CommandAdapter;
 import com.reem_codes.gp_android.adapter.HardwareAdapter;
 import com.reem_codes.gp_android.model.Hardware;
 import com.smarteist.autoimageslider.IndicatorAnimations;
@@ -32,7 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 public class HardwareListActivity extends AppCompatActivity {
+    final int LAUNCH_ADD_HARDWARE = 3;
 
     SliderView sliderView;
     SliderAdapterExample adapter;
@@ -44,7 +43,7 @@ public class HardwareListActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        int raspberry_id = intent.getIntExtra("raspberry_index", -1);
+        final int raspberry_id = intent.getIntExtra("raspberry_index", -1);
         if(raspberry_id != -1) {
             Toast.makeText(this, "the raspberry clicked is " + RaspberryActivity.raspberries.get(raspberry_id).getName(), Toast.LENGTH_LONG).show();
             TextView toolbarText = (TextView) findViewById(R.id.toolbar_title);
@@ -90,5 +89,35 @@ public class HardwareListActivity extends AppCompatActivity {
             }
         });
 
+        /* new command **/
+        ImageButton addCommand = (ImageButton) findViewById(R.id.add);
+        addCommand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), NewHardwareActivity.class);
+                i.putExtra("raspberry_index", raspberry_id);
+                startActivityForResult(i, LAUNCH_ADD_HARDWARE);
+            }
+        });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == LAUNCH_ADD_HARDWARE) {
+            if (resultCode == Activity.RESULT_OK) {
+                int gpio = data.getIntExtra("gpio", -1);
+                String name = data.getStringExtra("name");
+                String desc = data.getStringExtra("desc");
+                String icon = data.getStringExtra("icon");
+
+                String text = String.format("%s %d %s\n %s", name, gpio, icon, desc);
+                Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                Toast.makeText(this, "no hardware created", Toast.LENGTH_LONG).show();
+            }
+        }
+    }//onActivityResult
 }

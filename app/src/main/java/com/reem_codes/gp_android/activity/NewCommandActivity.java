@@ -1,19 +1,14 @@
 package com.reem_codes.gp_android.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
 import android.app.Activity;
-import android.provider.ContactsContract;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.reem_codes.gp_android.R;
@@ -21,8 +16,6 @@ import com.reem_codes.gp_android.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static com.reem_codes.gp_android.adapter.DayAdapter.days;
 
 
 public class NewCommandActivity extends Activity {
@@ -49,8 +42,8 @@ public class NewCommandActivity extends Activity {
         final List<String> plantsList = new ArrayList<>(Arrays.asList(configs));
 
         // Initializing an ArrayAdapter
-        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,R.layout.spinner,plantsList);
-        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner);
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,R.layout.command_spinner,plantsList);
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.command_spinner);
         spinner.setAdapter(spinnerArrayAdapter);
 
         // set click listener to options

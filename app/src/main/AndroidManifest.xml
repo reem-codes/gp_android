@@ -16,11 +16,11 @@
         android:theme="@style/AppTheme.NoActionBar.FullScreen"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:label">
-        <activity android:name=".activity.ScheduleActivity">
+        <activity android:name=".activity.NewHardwareActivity">
         </activity>
-        <activity android:name=".activity.HardwareListActivity"/>
-        <activity
-            android:name=".activity.CommandListActivity"/>
+        <activity android:name=".activity.ScheduleActivity"></activity>
+        <activity android:name=".activity.HardwareListActivity" />
+        <activity android:name=".activity.CommandListActivity" />
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,7 +32,7 @@
             android:name=".activity.LoginActivity"
             android:windowSoftInputMode="adjustResize|stateHidden|adjustPan" />
         <activity android:name=".activity.RaspberryActivity" />
-        <activity android:name=".activity.NewCommandActivity"/>
+        <activity android:name=".activity.NewCommandActivity" />
     </application>
 
 </manifest>
