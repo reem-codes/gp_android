@@ -89,9 +89,9 @@ public class HardwareListActivity extends AppCompatActivity {
             }
         });
 
-        /* new command **/
-        ImageButton addCommand = (ImageButton) findViewById(R.id.add);
-        addCommand.setOnClickListener(new View.OnClickListener() {
+        /* new hardware **/
+        ImageButton add = (ImageButton) findViewById(R.id.add);
+        add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), NewHardwareActivity.class);

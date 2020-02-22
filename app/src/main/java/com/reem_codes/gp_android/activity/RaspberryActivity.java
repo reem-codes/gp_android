@@ -7,10 +7,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.reem_codes.gp_android.R;
 import com.reem_codes.gp_android.adapter.RaspberryAdapter;
 import com.reem_codes.gp_android.model.Hardware;
@@ -52,5 +55,42 @@ public class RaspberryActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        ImageButton add = (ImageButton) findViewById(R.id.add);
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startQRScanner();
+            }
+        });
     }
+    private void startQRScanner() {
+        new IntentIntegrator(this).initiateScan();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        IntentResult result =   IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+
+        if (result != null) {
+            if (result.getContents() == null) {
+                Toast.makeText(this, "user cancelled",Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, result.getContents(),Toast.LENGTH_LONG).show();
+
+//                updateText(result.getContents());
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void updateText(String scanCode) {
+//        Intent intent = new Intent(this, ItemDetailsActivity.class);
+//        intent.putExtra(EXTRA_QR_RESULT, scanCode);
+//        startActivity(intent);
+    }
+
 }
