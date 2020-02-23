@@ -106,7 +106,7 @@ public class CommandAdapter extends ArrayAdapter<Command> {
          * This method takes an integer number,
          * converts it to binary
          * and then returns an array of on positions */
-        String binary = Integer.toBinaryString(x);
+        String binary = toBinary(x, 7);
         ArrayList<Integer> positions = new ArrayList<>();
         for(int i = 0; i < binary.length(); i++){
             if(binary.charAt(i) == '1'){
@@ -115,5 +115,16 @@ public class CommandAdapter extends ArrayAdapter<Command> {
         }
 
         return positions;
+    }
+
+    public static String toBinary(int x, int len) {
+        StringBuilder result = new StringBuilder();
+
+        for (int i = len - 1; i >= 0 ; i--) {
+            int mask = 1 << i;
+            result.append((x & mask) != 0 ? 1 : 0);
+        }
+
+        return result.toString();
     }
 }

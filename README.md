@@ -15,7 +15,7 @@
 * POST /schedule
 * POST /command
 
-* EDIT /command
+* PUT /command
 
 * DELETE /raspberry_user
 * DELETE /command

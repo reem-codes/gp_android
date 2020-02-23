@@ -99,14 +99,20 @@ public class ScheduleActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "You must select one day at east", Toast.LENGTH_LONG).show();
                     return;
                 }
-
+                int daysInt = 0;
+                for(int i = 0; i < isSelected.length; i++) {
+                    if(isSelected[i]){
+                        daysInt += Math.pow(2, isSelected.length - i - 1);
+                    }
+                }
 
                 isAM = am.isChecked();
+                Toast.makeText(getApplicationContext(), ""+ daysInt, Toast.LENGTH_SHORT).show();
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("hour", hour);
                 returnIntent.putExtra("minute", minute);
                 returnIntent.putExtra("isAM", isAM);
-                returnIntent.putExtra("days", isSelected);
+                returnIntent.putExtra("days", daysInt);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }

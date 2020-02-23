@@ -9,9 +9,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.reem_codes.gp_android.R;
+import com.reem_codes.gp_android.model.Hardware;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,13 +25,16 @@ public class NewCommandActivity extends Activity {
 
     boolean isOn = true;
     boolean isAM, isScheduled;
-    int hour, minute;
-    boolean[] isSelected;
+    int hour, minute, days;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_command);
-
+        Intent intent = getIntent();
+        String name = intent.getStringExtra("hardware");
+        if(name != null){
+            ((TextView) findViewById(R.id.hardware_name)).setText(name);
+        }
         // Get reference of widgets from XML layout
         final Spinner spinner = (Spinner) findViewById(R.id.spinner);
 
@@ -88,7 +93,7 @@ public class NewCommandActivity extends Activity {
                     returnIntent.putExtra("isAM", isAM);
                     returnIntent.putExtra("hour", hour);
                     returnIntent.putExtra("minute", minute);
-                    returnIntent.putExtra("days", isSelected);
+                    returnIntent.putExtra("days", days);
                 }
 
                 setResult(Activity.RESULT_OK, returnIntent);
@@ -115,7 +120,7 @@ public class NewCommandActivity extends Activity {
                 isAM = data.getBooleanExtra("isAM", true);
                 hour = data.getIntExtra("hour", -1);
                 minute = data.getIntExtra("minute", -1);
-                isSelected = data.getBooleanArrayExtra("days");
+                days = data.getIntExtra("days", -1);
 
                 Toast.makeText(this, "Schedule added", Toast.LENGTH_LONG).show();
             }
