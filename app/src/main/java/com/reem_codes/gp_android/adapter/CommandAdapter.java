@@ -18,10 +18,12 @@ import androidx.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.reem_codes.gp_android.R;
+import com.reem_codes.gp_android.activity.BaseActivity;
 import com.reem_codes.gp_android.activity.CommandListActivity;
 import com.reem_codes.gp_android.activity.HardwareListActivity;
 import com.reem_codes.gp_android.activity.NewCommandActivity;
 import com.reem_codes.gp_android.activity.RaspberryActivity;
+import com.reem_codes.gp_android.model.Base;
 import com.reem_codes.gp_android.model.Command;
 import com.reem_codes.gp_android.model.Created;
 import com.reem_codes.gp_android.model.Schedule;
@@ -101,10 +103,55 @@ public class CommandAdapter extends ArrayAdapter<Command> {
             @Override
             public void onClick(View view) {
                 command = getItem(position);
-                Toast.makeText(context, command.getId() + " was successfully deleted", Toast.LENGTH_LONG).show();
-                CommandListActivity.commands.remove(command);
-                remove(command);
-                listView.invalidate();
+                try {
+
+                    String url = context.getString(R.string.api_url) + "/command/" + command.getId();
+
+                    // then, we build the request by provising the url, the method and the body
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .delete()
+                            .addHeader("Authorization", "Bearer " + ((BaseActivity)context).currentLoggedUser.getAccess_token())
+                            .build();
+
+                    ((BaseActivity)context).client.newCall(request).enqueue(new Callback() {
+
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            ((Activity)context).runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(context, "command not deleted, please check network and try again", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            String result = response.body().string();
+                            System.out.println("GPDEBUG results are " + result);
+
+
+                            // use Gson to parse from a string to objects and lists
+                            // first create Gson object
+                            Gson gson = new Gson();
+                            // specify the object type: is the string a json representation of a command? a user? in our case: login
+                            TypeToken<Base> typeToken = new TypeToken<Base>(){};
+                            // create the login object using the response body string and gson parser
+                            final Base res = gson.fromJson(result, typeToken.getType());
+                            ((Activity)context).runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(context,res.getMessage() , Toast.LENGTH_LONG).show();
+                                    ((BaseActivity)context).loadActivity();
+                                }
+                            });
+                        }
+                    });
+                } catch (Exception e){
+                    Toast.makeText(context, "error while deleting, please check your internet connection", Toast.LENGTH_LONG).show();
+
+                }
             }
         });
 

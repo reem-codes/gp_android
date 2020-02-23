@@ -1,7 +1,5 @@
 package com.reem_codes.gp_android.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,14 +15,13 @@ import com.google.gson.reflect.TypeToken;
 import com.reem_codes.gp_android.R;
 import com.reem_codes.gp_android.adapter.CommandAdapter;
 import com.reem_codes.gp_android.adapter.HardwareAdapter;
+import com.reem_codes.gp_android.model.Base;
 import com.reem_codes.gp_android.model.Command;
 import com.reem_codes.gp_android.model.Created;
 import com.reem_codes.gp_android.model.Hardware;
 import com.reem_codes.gp_android.model.Schedule;
-import com.reem_codes.gp_android.model.User;
 
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +30,6 @@ import okhttp3.Callback;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
-import static com.reem_codes.gp_android.adapter.DayAdapter.days;
 
 public class CommandListActivity extends BaseActivity {
 
@@ -168,14 +163,14 @@ public class CommandListActivity extends BaseActivity {
                     String time = String.format("%d:%d %s", hour, minute, isAM? "AM":"PM");
                     String sJson = String.format("{\"%s\": \"%s\", \"%s\": %d}", "time", time, "days",daysInt);
                     try {
-                        postScheduleApi(sJson, config, isEdit);
+                        postPutScheduleApi(sJson, config, isEdit);
                     } catch (IOException e) {
                         Toast.makeText(this, "schedule was not added. please check network and try again",Toast.LENGTH_LONG).show();
                     }
                 }
                 else {
                     try {
-                        postCommandApi(config, -1, isEdit);
+                        postPutCommandApi(config, -1, isEdit);
                     } catch (IOException e) {
                         Toast.makeText(this, "schedule was not added. please check network and try again",Toast.LENGTH_LONG).show();
                     }
@@ -185,10 +180,9 @@ public class CommandListActivity extends BaseActivity {
                 Toast.makeText(this, "no command created", Toast.LENGTH_LONG).show();
             }
         }
-
     }//onActivityResult
 
-    public void postScheduleApi(String json, final Boolean config, final boolean isEdit) throws IOException{
+    public void postPutScheduleApi(String json, final Boolean config, final boolean isEdit) throws IOException{
         url = getString(R.string.api_url) + "/schedule";
         RequestBody body = RequestBody.create(JSON, json);
         System.out.println("GPDEBUG json is " + json);
@@ -236,7 +230,7 @@ public class CommandListActivity extends BaseActivity {
                 TypeToken<Created<Schedule>> typeToken = new TypeToken<Created<Schedule>>(){};
                 // create the login object using the response body string and gson parser
                 Created<Schedule> schedule = gson.fromJson(result, typeToken.getType());
-                postCommandApi(config, schedule.getObject().getId(), isEdit);
+                postPutCommandApi(config, schedule.getObject().getId(), isEdit);
 //                runOnUiThread(new Runnable() {
 //                    @Override
 //                    public void run() {
@@ -248,7 +242,7 @@ public class CommandListActivity extends BaseActivity {
         });
     }
 
-    public void postCommandApi(Boolean config, int schedule_id, final boolean isEdit) throws IOException{
+    public void postPutCommandApi(Boolean config, int schedule_id, final boolean isEdit) throws IOException{
         url = getString(R.string.api_url) + "/command";
         String json = String.format("{\"%s\": %d, \"%s\": %b", "hardware_id", hardware.getId(), "configuration", config);
         json += schedule_id != -1? String.format(",\"%s\": %d", "schedule_id", schedule_id) : "";
@@ -321,5 +315,4 @@ public class CommandListActivity extends BaseActivity {
             }
         });
     }
-
 }

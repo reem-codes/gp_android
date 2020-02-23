@@ -26,11 +26,11 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 
 public abstract class BaseActivity extends AppCompatActivity {
-    OkHttpClient client = new OkHttpClient();
+    public OkHttpClient client = new OkHttpClient();
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
-    String url;
-    Login currentLoggedUser;
+    public String url;
+    public Login currentLoggedUser;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
