@@ -41,8 +41,6 @@ public class SliderAdapterExample extends SliderViewAdapter<SliderAdapterExample
 
         int resID = context.getResources().getIdentifier( sliderItem.getImageUrl(), "drawable", context.getPackageName());
         viewHolder.imageViewBackground.setImageResource(resID);
-
-        System.out.println("GPDEBUG resID " + resID + " image id " + R.drawable.cozy1);
     }
 
     @Override

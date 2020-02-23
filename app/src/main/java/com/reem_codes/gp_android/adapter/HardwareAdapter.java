@@ -45,12 +45,18 @@ public class HardwareAdapter extends ArrayAdapter<Hardware> {
         ImageView image = (ImageView) item.findViewById(R.id.icon);
 
         name.setText(hardware.getName());
+        int resID = context.getResources().getIdentifier( "other", "drawable", context.getPackageName());
 
-        int resID = context.getResources().getIdentifier( hardware.getIcon(), "drawable", context.getPackageName());
-        if(resID == 0) {
-            resID = context.getResources().getIdentifier( "other", "drawable", context.getPackageName());
+        if( hardware.getIcon() != null) {
+            resID = context.getResources().getIdentifier( hardware.getIcon(), "drawable", context.getPackageName());
+            System.out.println("GPDEBUG " + resID);
+            if(resID == 0) {
+                resID = context.getResources().getIdentifier( "other", "drawable", context.getPackageName());
+
+            }
         }
         image.setImageResource(resID);
+
 
         return item;
     }

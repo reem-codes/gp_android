@@ -18,41 +18,49 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.reem_codes.gp_android.R;
 import com.reem_codes.gp_android.adapter.RaspberryAdapter;
 import com.reem_codes.gp_android.model.Hardware;
+import com.reem_codes.gp_android.model.Login;
 import com.reem_codes.gp_android.model.Raspberry;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class RaspberryActivity extends BaseActivity {
 
     public static List<Raspberry> raspberries;
+    ListView listView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_raspberry);
         super.setToolbar("Raspberry List");
+        checkUser(this);
+
 
         /* create a mock list
         TODO: take the arraylist from the api
          */
         raspberries= new ArrayList<>();
-        raspberries.add(new Raspberry(1, "raspberry 1", "9878y"));
-        raspberries.add(new Raspberry(2, "my room", "9878y"));
-        raspberries.add(new Raspberry(3, "family home", "9878y"));
 
         // take the listview
-        ListView listView = (ListView) findViewById(R.id.raspberries);
-        // make a raspberry adapter
-        ArrayAdapter arrayAdapter = new RaspberryAdapter(this, raspberries, listView);
-        // set the listview's adapter to the raspberry one
-        listView.setAdapter(arrayAdapter);
-
+        listView = (ListView) findViewById(R.id.raspberries);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -69,6 +77,9 @@ public class RaspberryActivity extends BaseActivity {
                 startQRScanner();
             }
         });
+
+        loadActivity();
+
     }
 
 
@@ -103,7 +114,61 @@ public class RaspberryActivity extends BaseActivity {
 
     @Override
     public void loadActivity() {
-        Toast.makeText(this, "Reload Activity",Toast.LENGTH_LONG).show();
+        try {
+            getRaspberryApi();
+        } catch (IOException e) {
+            Toast.makeText(this, "please check network and try again",Toast.LENGTH_LONG).show();
+        }
+    }
 
+    public void getRaspberryApi() throws IOException{
+        url = getString(R.string.api_url) + "/raspberry?user_id="+ currentLoggedUser.getUser().getId();
+
+        // then, we build the request by provising the url, the method and the body
+        Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .addHeader("Authorization", "Bearer " + currentLoggedUser.getAccess_token())
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(RaspberryActivity.this, "please check network and try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                System.out.println("GPDEBUG results are " + result);
+
+
+                // use Gson to parse from a string to objects and lists
+                // first create Gson object
+                Gson gson = new Gson();
+                // specify the object type: is the string a json representation of a command? a user? in our case: login
+                TypeToken<ArrayList<Raspberry>> typeToken = new TypeToken<ArrayList<Raspberry>>(){};
+                // create the login object using the response body string and gson parser
+                raspberries = gson.fromJson(result, typeToken.getType());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(RaspberryActivity.this," Success" , Toast.LENGTH_LONG).show();
+
+                        // make a raspberry adapter
+                        ArrayAdapter arrayAdapter = new RaspberryAdapter(RaspberryActivity.this, raspberries, listView);
+                        // set the listview's adapter to the raspberry one
+                        listView.setAdapter(arrayAdapter);
+                    }
+                });
+
+            }
+        });
     }
 }

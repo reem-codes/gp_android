@@ -12,14 +12,24 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.reem_codes.gp_android.R;
 import com.reem_codes.gp_android.adapter.CommandAdapter;
+import com.reem_codes.gp_android.adapter.HardwareAdapter;
 import com.reem_codes.gp_android.model.Command;
+import com.reem_codes.gp_android.model.Hardware;
 import com.reem_codes.gp_android.model.Schedule;
 import com.reem_codes.gp_android.model.User;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import static com.reem_codes.gp_android.adapter.DayAdapter.days;
 
@@ -27,16 +37,19 @@ public class CommandListActivity extends BaseActivity {
 
     public static List<Command> commands;
     final int LAUNCH_ADD_COMMAND = 1;
-
+    Hardware hardware;
+    ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_command_list);
+        checkUser(this);
+
         Intent intent = getIntent();
-        int raspberry_id = intent.getIntExtra("hardware_index", -1);
-        if(raspberry_id != -1) {
-            Toast.makeText(this, "the hardware clicked is " + HardwareListActivity.hardwares.get(raspberry_id).getName(), Toast.LENGTH_LONG).show();
-            super.setToolbar(HardwareListActivity.hardwares.get(raspberry_id).getName() + "'s Command List");
+        int hardware_index = intent.getIntExtra("hardware_index", -1);
+        if(hardware_index != -1) {
+            hardware = HardwareListActivity.hardwares.get(hardware_index);
+            super.setToolbar(hardware.getName() + "'s Command List");
 
         }
 
@@ -44,24 +57,9 @@ public class CommandListActivity extends BaseActivity {
         TODO: get list from server
          */
         commands = new ArrayList<>();
-        commands.add(new Command(1, "2020-01-01", new Schedule(1, 102, "9:30 AM", "345"), true));
-        commands.add(new Command(2, "2020-01-01", new Schedule(2, 127, "10:45 PM", "345"), true));
-        commands.add(new Command(3, "2020-01-01", new Schedule(3, 1, "1:00 AM", "345"), false));
-        commands.add(new Command(4, "2020-01-01", new Schedule(4, 105, "5:15 AM", "345"), true));
-        commands.add(new Command(5, "2020-01-01", new Schedule(5, 86, "6:20 AM", "345"), false));
-        commands.add(new Command(5, "2020-01-01", new Schedule(6, 85, "2:13 AM", "345"), false));
-        commands.add(new Command(5, "2020-01-01", new Schedule(7, 87, "7:55 AM", "345"), false));
-        commands.add(new Command(5, "2020-01-01", new Schedule(8, 33, "8:35 AM", "345"), false));
-        commands.add(new Command(5, "2020-01-01", new Schedule(9, 13, "3:40 AM", "345"), false));
-        commands.add(new Command(5, "2020-01-01", new Schedule(10, 16, "11:17 AM", "345"), false));
-        commands.add(new Command(5, "2020-01-01", new Schedule(1, 18, "12:44 AM", "345"), false));
-
         // get the listview
-        ListView listView = (ListView) findViewById(R.id.commands);
+        listView = (ListView) findViewById(R.id.commands);
         // make an array adapter for the listview of an object of type array adabter
-        ArrayAdapter arrayAdapter = new CommandAdapter(this, commands, listView);
-        // set the array adapter to the listview
-        listView.setAdapter(arrayAdapter);
 
 
         /* new command **/
@@ -73,6 +71,10 @@ public class CommandListActivity extends BaseActivity {
                 startActivityForResult(i, LAUNCH_ADD_COMMAND);
             }
         });
+
+
+        loadActivity();
+
     }
 
     @Override
@@ -109,7 +111,61 @@ public class CommandListActivity extends BaseActivity {
 
     @Override
     public void loadActivity() {
-        Toast.makeText(this, "Reload Activity",Toast.LENGTH_LONG).show();
+        try {
+            getCommandApi();
+        } catch (IOException e) {
+            Toast.makeText(this, "please check network and try again",Toast.LENGTH_LONG).show();
+        }
+    }
 
+
+    public void getCommandApi() throws IOException{
+        url = getString(R.string.api_url) + "/command?schedule_id=not_null&hardware_id="+ hardware.getId();
+        // then, we build the request by provising the url, the method and the body
+        Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .addHeader("Authorization", "Bearer " + currentLoggedUser.getAccess_token())
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(CommandListActivity.this, "please check network and try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                System.out.println("GPDEBUG results are " + result);
+
+
+                // use Gson to parse from a string to objects and lists
+                // first create Gson object
+                Gson gson = new Gson();
+                // specify the object type: is the string a json representation of a command? a user? in our case: login
+                TypeToken<ArrayList<Command>> typeToken = new TypeToken<ArrayList<Command>>(){};
+                // create the login object using the response body string and gson parser
+                commands = gson.fromJson(result, typeToken.getType());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(CommandListActivity.this," Success" , Toast.LENGTH_LONG).show();
+
+                        ArrayAdapter arrayAdapter = new CommandAdapter(CommandListActivity.this, commands, listView);
+                        // set the array adapter to the listview
+                        listView.setAdapter(arrayAdapter);
+
+                    }
+                });
+
+            }
+        });
     }
 }

@@ -17,17 +17,26 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.reem_codes.gp_android.adapter.HardwareAdapter;
+import com.reem_codes.gp_android.adapter.RaspberryAdapter;
 import com.reem_codes.gp_android.model.Hardware;
+import com.reem_codes.gp_android.model.Raspberry;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
 import com.reem_codes.gp_android.R;
 import com.reem_codes.gp_android.adapter.SliderAdapterExample;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class HardwareListActivity extends BaseActivity {
@@ -36,16 +45,19 @@ public class HardwareListActivity extends BaseActivity {
     SliderView sliderView;
     SliderAdapterExample adapter;
     public static List<Hardware> hardwares;
+    Raspberry raspberry;
+    GridView gridView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hardware_list);
+        checkUser(this);
 
 
         Intent intent = getIntent();
         final int raspberry_id = intent.getIntExtra("raspberry_index", -1);
         if(raspberry_id != -1) {
-            Toast.makeText(this, "the raspberry clicked is " + RaspberryActivity.raspberries.get(raspberry_id).getName(), Toast.LENGTH_LONG).show();
+            raspberry = RaspberryActivity.raspberries.get(raspberry_id);
             super.setToolbar(RaspberryActivity.raspberries.get(raspberry_id).getName() + "'s Hardware List");
 
         }
@@ -65,18 +77,7 @@ public class HardwareListActivity extends BaseActivity {
 
         // make mock hardware list
         hardwares = new ArrayList<>();
-        hardwares.add(new Hardware(1, "et", "led", "light", "led on my room", 11, 1, true));
-        hardwares.add(new Hardware(2, "et", "solenoid", "electric", "AC on my room", 13, 1, false));
-        hardwares.add(new Hardware(3, "et", "camera", "security", "garage camera", 13, 2, true));
-        hardwares.add(new Hardware(4, "et", "weather station", "weather", "checking garden's weather", 13, 2, true));
-        hardwares.add(new Hardware(5, "et", "washing machine", "plumbing", "turn on washing machine", 13, 2, true));
-        hardwares.add(new Hardware(6, "et", "my cat's food", "other", "feed cat", 13, 2, false));
-
-        GridView gridView = (GridView) findViewById(R.id.grid_view);
-        // make an array adapter for the gridview of an object of type array adabter
-        ArrayAdapter arrayAdapter = new HardwareAdapter(this, hardwares);
-        // set the array adapter to the gridview
-        gridView.setAdapter(arrayAdapter);
+        gridView = (GridView) findViewById(R.id.grid_view);
 
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -98,6 +99,8 @@ public class HardwareListActivity extends BaseActivity {
                 startActivityForResult(i, LAUNCH_ADD_HARDWARE);
             }
         });
+
+        loadActivity();
     }
 
     @Override
@@ -122,7 +125,63 @@ public class HardwareListActivity extends BaseActivity {
 
     @Override
     public void loadActivity() {
-        Toast.makeText(this, "Reload Activity",Toast.LENGTH_LONG).show();
+        try {
+            getHardwareApi();
+        } catch (IOException e) {
+            Toast.makeText(this, "please check network and try again",Toast.LENGTH_LONG).show();
+        }
+    }
 
+
+    public void getHardwareApi() throws IOException{
+        url = getString(R.string.api_url) + String.format("/hardware?user_id=%d&raspberry_id=%d",currentLoggedUser.getUser().getId(), raspberry.getId());
+
+        // then, we build the request by provising the url, the method and the body
+        Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .addHeader("Authorization", "Bearer " + currentLoggedUser.getAccess_token())
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(HardwareListActivity.this, "please check network and try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                System.out.println("GPDEBUG results are " + result);
+
+
+                // use Gson to parse from a string to objects and lists
+                // first create Gson object
+                Gson gson = new Gson();
+                // specify the object type: is the string a json representation of a command? a user? in our case: login
+                TypeToken<ArrayList<Hardware>> typeToken = new TypeToken<ArrayList<Hardware>>(){};
+                // create the login object using the response body string and gson parser
+                hardwares = gson.fromJson(result, typeToken.getType());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(HardwareListActivity.this," Success" , Toast.LENGTH_LONG).show();
+
+                        // make an array adapter for the gridview of an object of type array adabter
+                        ArrayAdapter arrayAdapter = new HardwareAdapter(HardwareListActivity.this, hardwares);
+                        // set the array adapter to the gridview
+                        gridView.setAdapter(arrayAdapter);
+
+                    }
+                });
+
+            }
+        });
     }
 }

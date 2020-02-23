@@ -9,14 +9,29 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.reem_codes.gp_android.R;
+import com.reem_codes.gp_android.model.Login;
+
+import java.io.IOException;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
 
 public abstract class BaseActivity extends AppCompatActivity {
+    OkHttpClient client = new OkHttpClient();
+    public static final MediaType JSON
+            = MediaType.parse("application/json; charset=utf-8");
+    String url;
+    Login currentLoggedUser;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -50,6 +65,20 @@ public abstract class BaseActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_top);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
+
+    public void checkUser(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("com.reem_codes.gp_android", Context.MODE_PRIVATE);
+        String login = sharedPreferences.getString("login", null);
+        if(login != null) {
+            Gson gson = new Gson();
+            TypeToken<Login> token = new TypeToken<Login>(){};
+            currentLoggedUser = gson.fromJson(login, token.getType());
+
+        } else {
+            Intent intent = new Intent(context, LoginActivity.class);
+            startActivity(intent);
+        }
     }
 
     public abstract void loadActivity();
