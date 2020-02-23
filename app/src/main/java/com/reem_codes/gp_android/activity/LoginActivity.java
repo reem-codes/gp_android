@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.reem_codes.gp_android", Context.MODE_PRIVATE);
         String login = sharedPreferences.getString("login", null);
         if(login != null) {
-            intent = new Intent(this, MainActivity.class);
+            intent = new Intent(this, RaspberryActivity.class);
             startActivity(intent);
         }
 //        Gson gson = new Gson();
