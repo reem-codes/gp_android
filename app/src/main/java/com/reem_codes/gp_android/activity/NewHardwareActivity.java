@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.reem_codes.gp_android.R;
@@ -24,8 +25,8 @@ import java.util.List;
 public class NewHardwareActivity extends AppCompatActivity {
 
     String[] icons = {"light", "electric", "security", "weather", "plumbing", "other"};
-    int imageSelectedId, raspberry_index, gpio;
-    String name, desc;
+    int imageSelectedId, gpio;
+    String name, desc, raspberry;
     EditText nameEdit, gpioEdit, descEdit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +34,10 @@ public class NewHardwareActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_hardware);
 
         Intent intent = getIntent();
-        raspberry_index = intent.getIntExtra("raspberry_index", -1);
-
+        raspberry = intent.getStringExtra("raspberry");
+        if(raspberry != null){
+            ((TextView) findViewById(R.id.raspberry_name)).setText(raspberry);
+        }
 
         nameEdit = (EditText) findViewById(R.id.name);
         gpioEdit = (EditText) findViewById(R.id.gpio);

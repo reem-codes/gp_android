@@ -19,8 +19,11 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.reem_codes.gp_android.adapter.CommandAdapter;
 import com.reem_codes.gp_android.adapter.HardwareAdapter;
 import com.reem_codes.gp_android.adapter.RaspberryAdapter;
+import com.reem_codes.gp_android.model.Command;
+import com.reem_codes.gp_android.model.Created;
 import com.reem_codes.gp_android.model.Hardware;
 import com.reem_codes.gp_android.model.Raspberry;
 import com.smarteist.autoimageslider.IndicatorAnimations;
@@ -36,6 +39,7 @@ import java.util.List;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
@@ -95,7 +99,7 @@ public class HardwareListActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), NewHardwareActivity.class);
-                i.putExtra("raspberry_index", raspberry_id);
+                i.putExtra("raspberry", raspberry.getName());
                 startActivityForResult(i, LAUNCH_ADD_HARDWARE);
             }
         });
@@ -113,9 +117,12 @@ public class HardwareListActivity extends BaseActivity {
                 String desc = data.getStringExtra("desc");
                 String icon = data.getStringExtra("icon");
 
-                String text = String.format("%s %d %s\n %s", name, gpio, icon, desc);
-                Toast.makeText(this, text, Toast.LENGTH_LONG).show();
-
+                String text = String.format("{\"name\":\"%s\", \"gpio\":%d,\"icon\": \"%s\", \"desc\": \"%s\", \"raspberry_id\": %d}", name, gpio, icon, desc, raspberry.getId());
+                try {
+                    postHardwareApi(text);
+                } catch (IOException e) {
+                    Toast.makeText(this, "please check network and try again",Toast.LENGTH_LONG).show();
+                }
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 Toast.makeText(this, "no hardware created", Toast.LENGTH_LONG).show();
@@ -184,4 +191,61 @@ public class HardwareListActivity extends BaseActivity {
             }
         });
     }
+
+    public void postHardwareApi(String json) throws IOException{
+        url = getString(R.string.api_url) + "/hardware";
+
+        RequestBody body = RequestBody.create(JSON, json);
+        System.out.println("GPDEBUG json is " + json);
+
+        // then, we build the request by provising the url, the method and the body
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .addHeader("Authorization", "Bearer " + currentLoggedUser.getAccess_token())
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(HardwareListActivity.this, "hardware not made, please check network and try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                System.out.println("GPDEBUG results are " + result);
+
+
+                // use Gson to parse from a string to objects and lists
+                // first create Gson object
+                Gson gson = new Gson();
+                // specify the object type: is the string a json representation of a command? a user? in our case: login
+                TypeToken<Created<Hardware>> typeToken = new TypeToken<Created<Hardware>>(){};
+                // create the login object using the response body string and gson parser
+                final Created<Hardware> hardware = gson.fromJson(result, typeToken.getType());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(HardwareListActivity.this," Success" , Toast.LENGTH_LONG).show();
+                        if(hardware.getObject() != null){
+                            hardwares.add(hardware.getObject());
+                        }
+                        // make an array adapter for the gridview of an object of type array adabter
+                        ArrayAdapter arrayAdapter = new HardwareAdapter(HardwareListActivity.this, hardwares);
+                        // set the array adapter to the gridview
+                        gridView.setAdapter(arrayAdapter);
+
+                    }
+                });
+            }
+        });
+    }
+
 }
