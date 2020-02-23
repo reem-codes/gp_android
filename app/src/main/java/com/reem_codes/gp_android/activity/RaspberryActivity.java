@@ -23,7 +23,9 @@ import com.google.gson.reflect.TypeToken;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.reem_codes.gp_android.R;
+import com.reem_codes.gp_android.adapter.CommandAdapter;
 import com.reem_codes.gp_android.adapter.RaspberryAdapter;
+import com.reem_codes.gp_android.model.Created;
 import com.reem_codes.gp_android.model.Hardware;
 import com.reem_codes.gp_android.model.Login;
 import com.reem_codes.gp_android.model.Raspberry;
@@ -97,20 +99,28 @@ public class RaspberryActivity extends BaseActivity {
             if (result.getContents() == null) {
                 Toast.makeText(this, "user cancelled",Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, result.getContents(),Toast.LENGTH_LONG).show();
+                String results = result.getContents();
 
-//                updateText(result.getContents());
+                int raspberry_id = -1;
+                try {
+                    raspberry_id = Integer.valueOf(results);
+                } catch (Exception e) {
+                    Toast.makeText(this, "an invalid code is scanned",Toast.LENGTH_LONG).show();
+                }
+                if(raspberry_id != -1) {
+                    try {
+                        putRaspberryUser(raspberry_id);
+                    } catch (IOException e) {
+                        Toast.makeText(this, "please check network and try again",Toast.LENGTH_LONG).show();
+                    }
+                }
+                
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
-    private void updateText(String scanCode) {
-//        Intent intent = new Intent(this, ItemDetailsActivity.class);
-//        intent.putExtra(EXTRA_QR_RESULT, scanCode);
-//        startActivity(intent);
-    }
 
     @Override
     public void loadActivity() {
@@ -171,4 +181,72 @@ public class RaspberryActivity extends BaseActivity {
             }
         });
     }
+
+    private void putRaspberryUser(int raspberry_id) throws IOException{
+        url = getString(R.string.api_url) + "/raspberry_user";
+        String json = String.format("{\"raspberry_id\": %d}", raspberry_id);
+
+        RequestBody body = RequestBody.create(JSON, json);
+        System.out.println("GPDEBUG json is " + json);
+
+        // then, we build the request by provising the url, the method and the body
+        Request request = new Request.Builder()
+                .url(url)
+                .put(body)
+                .addHeader("Authorization", "Bearer " + currentLoggedUser.getAccess_token())
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(RaspberryActivity.this, "please check network and try again", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                System.out.println("GPDEBUG results are " + result);
+                final int code = response.code();
+
+                // use Gson to parse from a string to objects and lists
+                // first create Gson object
+                Gson gson = new Gson();
+                // specify the object type: is the string a json representation of a command? a user? in our case: login
+                TypeToken<Created<Raspberry>> typeToken = new TypeToken<Created<Raspberry>>(){};
+                // create the login object using the response body string and gson parser
+                final Created<Raspberry> raspberry = gson.fromJson(result, typeToken.getType());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(raspberry.getObject() != null){
+
+                            Toast.makeText(RaspberryActivity.this,"Success" , Toast.LENGTH_LONG).show();
+                            raspberries.add(raspberry.getObject());
+
+                            // make a raspberry adapter
+                            ArrayAdapter arrayAdapter = new RaspberryAdapter(RaspberryActivity.this, raspberries, listView);
+                            // set the listview's adapter to the raspberry one
+                            listView.setAdapter(arrayAdapter);
+                        } else if(code == 500){
+                            Toast.makeText(RaspberryActivity.this,"Already added", Toast.LENGTH_LONG).show();
+
+                        } else if (raspberry.getMessage() != null){
+                            Toast.makeText(RaspberryActivity.this,raspberry.getMessage(), Toast.LENGTH_LONG).show();
+
+                        } else {
+                            Toast.makeText(RaspberryActivity.this, "an error occurred. Please check your network and try again", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+            }
+        });
+    }
+
 }

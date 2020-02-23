@@ -6,18 +6,27 @@ public class Command extends Base{
     private String updateAt ;
 
     private Schedule schedule;
+    private int hardware_id;
     private boolean configuration;
 
     public Command() {
 
     }
 
-
-    public Command(int id, String updateAt, Schedule schedule, boolean isOn) {
+    public Command(int id, String updateAt, Schedule schedule, int hardware_id, boolean configuration) {
         this.id = id;
         this.updateAt = updateAt;
         this.schedule = schedule;
-        this.configuration = isOn;
+        this.hardware_id = hardware_id;
+        this.configuration = configuration;
+    }
+
+    public int getHardware_id() {
+        return hardware_id;
+    }
+
+    public void setHardware_id(int hardware_id) {
+        this.hardware_id = hardware_id;
     }
 
     public String getUpdateAt() {

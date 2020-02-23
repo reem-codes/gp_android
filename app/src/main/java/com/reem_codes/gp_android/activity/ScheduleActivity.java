@@ -5,12 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.DateTimeKeyListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.flexbox.AlignItems;
 import com.google.android.flexbox.FlexDirection;
@@ -18,26 +21,49 @@ import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 import com.reem_codes.gp_android.R;
+import com.reem_codes.gp_android.adapter.CommandAdapter;
 import com.reem_codes.gp_android.adapter.DayAdapter;
+
+import java.util.Date;
 
 public class ScheduleActivity extends AppCompatActivity {
 
     EditText hourEdit, minuteEdit;
-    RadioButton am;
+    RadioButton am, pm;
     int hour, minute;
-    boolean isAM;
+    boolean isAM, isEdit;
 
     public static boolean[] isSelected = {false, false, false, false, false, false, false};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
-
+        TextView toolbarText = (TextView) findViewById(R.id.toolbar_title);
+        toolbarText.setText("Add Schedule");
         hourEdit = (EditText) findViewById(R.id.hour);
         minuteEdit = (EditText) findViewById(R.id.min);
         am = (RadioButton) findViewById(R.id.am);
+        pm = (RadioButton) findViewById(R.id.pm);
 
+        Intent intent = getIntent();
+        isEdit = intent.getBooleanExtra("isEdit", false);
+        if(isEdit) {
+            toolbarText.setText("Edit Schedule");
+            String time = intent.getStringExtra("time");
+            int days = intent.getIntExtra("days", 0);
+            String[] split = time.split(":");
+            hour = Integer.valueOf(split[0]);
+            String[] secondSplit= split[1].split(" ");
+            minute = Integer.valueOf(secondSplit[0]);
+            isAM = secondSplit[1].equals("AM")? true: false;
 
+            hourEdit.setText(""+hour);
+            minuteEdit.setText(""+minute);
+            am.setChecked(isAM);
+            pm.setChecked(!isAM);
+
+            isSelected = CommandAdapter.isSelected(days);
+        }
         /*
         app:flexWrap="wrap"
             app:justifyContent="space_around"

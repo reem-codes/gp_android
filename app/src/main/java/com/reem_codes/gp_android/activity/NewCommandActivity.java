@@ -12,8 +12,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.reem_codes.gp_android.R;
+import com.reem_codes.gp_android.model.Command;
 import com.reem_codes.gp_android.model.Hardware;
+import com.reem_codes.gp_android.model.Login;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,14 +30,29 @@ public class NewCommandActivity extends Activity {
     boolean isOn = true;
     boolean isAM, isScheduled;
     int hour, minute, days;
+    boolean isEdit;
+    Command command;
+    Gson gson;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_command);
+        gson = new Gson();
+
+        TextView toolbarText = (TextView) findViewById(R.id.toolbar_title);
+        toolbarText.setText("Add Command");
+
         Intent intent = getIntent();
         String name = intent.getStringExtra("hardware");
+        isEdit = intent.getBooleanExtra("isEdit", false);
         if(name != null){
             ((TextView) findViewById(R.id.hardware_name)).setText(name);
+        }
+        if(isEdit) {
+            ((TextView) findViewById(R.id.textView)).setText("Edit Command");
+            toolbarText.setText("Edit Command");
+            TypeToken<Command> token = new TypeToken<Command>(){};
+            command = gson.fromJson(intent.getStringExtra("command"), token.getType());
         }
         // Get reference of widgets from XML layout
         final Spinner spinner = (Spinner) findViewById(R.id.spinner);
@@ -71,7 +90,11 @@ public class NewCommandActivity extends Activity {
 
             }
         });
+        if(isEdit){
+            System.out.println("GPDEBUG " + command.isConfiguration());
+            spinner.setSelection(command.isConfiguration()? spinnerArrayAdapter.getPosition(configs[0]) : spinnerArrayAdapter.getPosition(configs[1]));
 
+        }
         ImageButton close = (ImageButton) findViewById(R.id.close);
         close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +110,12 @@ public class NewCommandActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("config", isOn);
+                returnIntent.putExtra("config", spinner.getSelectedItemPosition() == 0);
+                if(isEdit){
+                    returnIntent.putExtra("command", gson.toJson(command));
+                    returnIntent.putExtra("isEdit", true);
+
+                }
                 if(isScheduled){
                     returnIntent.putExtra("isScheduled", isScheduled);
                     returnIntent.putExtra("isAM", isAM);
@@ -102,10 +130,18 @@ public class NewCommandActivity extends Activity {
         });
 
         Button schedule = (Button) findViewById(R.id.schedule);
+        if(isEdit) {
+            schedule.setText("Edit Schedule");
+        }
         schedule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ScheduleActivity.class);
+                if(isEdit) {
+                    intent.putExtra("isEdit", true);
+                    intent.putExtra("days", command.getSchedule().getDays());
+                    intent.putExtra("time", command.getSchedule().getTime());
+                }
                 startActivityForResult(intent, LAUNCH_ADD_SCHEDULE);
             }
         });
@@ -122,7 +158,7 @@ public class NewCommandActivity extends Activity {
                 minute = data.getIntExtra("minute", -1);
                 days = data.getIntExtra("days", -1);
 
-                Toast.makeText(this, "Schedule added", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, isEdit ? "Schedule edited" : "Schedule added", Toast.LENGTH_LONG).show();
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 Toast.makeText(this, "no schedule added", Toast.LENGTH_LONG).show();

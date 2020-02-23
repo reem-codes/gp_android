@@ -32,6 +32,8 @@ public class NewHardwareActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_hardware);
+        TextView toolbarText = (TextView) findViewById(R.id.toolbar_title);
+        toolbarText.setText("Add Hardware");
 
         Intent intent = getIntent();
         raspberry = intent.getStringExtra("raspberry");

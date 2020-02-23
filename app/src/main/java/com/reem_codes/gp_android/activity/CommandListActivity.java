@@ -24,6 +24,7 @@ import com.reem_codes.gp_android.model.Schedule;
 import com.reem_codes.gp_android.model.User;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +42,7 @@ public class CommandListActivity extends BaseActivity {
     final int LAUNCH_ADD_COMMAND = 1;
     Hardware hardware;
     ListView listView;
+    Command eCommand;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,10 +148,16 @@ public class CommandListActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == LAUNCH_ADD_COMMAND) {
+        if (requestCode == LAUNCH_ADD_COMMAND || requestCode == CommandAdapter.LAUNCH_EDIT_COMMAND) {
             if (resultCode == Activity.RESULT_OK) {
                 boolean config = data.getBooleanExtra("config", true);
+                boolean isEdit = data.getBooleanExtra("isEdit", false);
                 boolean isScheduled = data.getBooleanExtra("isScheduled", false);
+                if(isEdit){
+                    TypeToken<Command> token = new TypeToken<Command>(){};
+                    eCommand = (new Gson()).fromJson(data.getStringExtra("command"), token.getType());
+                    System.out.println("GPDEBUG IS EDIT");
+                }
 
                 if(isScheduled) {
                     boolean isAM = data.getBooleanExtra("isAM", true);
@@ -160,14 +168,14 @@ public class CommandListActivity extends BaseActivity {
                     String time = String.format("%d:%d %s", hour, minute, isAM? "AM":"PM");
                     String sJson = String.format("{\"%s\": \"%s\", \"%s\": %d}", "time", time, "days",daysInt);
                     try {
-                        postScheduleApi(sJson, config);
+                        postScheduleApi(sJson, config, isEdit);
                     } catch (IOException e) {
                         Toast.makeText(this, "schedule was not added. please check network and try again",Toast.LENGTH_LONG).show();
                     }
                 }
                 else {
                     try {
-                        postCommandApi(config, -1);
+                        postCommandApi(config, -1, isEdit);
                     } catch (IOException e) {
                         Toast.makeText(this, "schedule was not added. please check network and try again",Toast.LENGTH_LONG).show();
                     }
@@ -177,19 +185,31 @@ public class CommandListActivity extends BaseActivity {
                 Toast.makeText(this, "no command created", Toast.LENGTH_LONG).show();
             }
         }
+
     }//onActivityResult
 
-    public void postScheduleApi(String json, final Boolean config) throws IOException{
+    public void postScheduleApi(String json, final Boolean config, final boolean isEdit) throws IOException{
         url = getString(R.string.api_url) + "/schedule";
         RequestBody body = RequestBody.create(JSON, json);
         System.out.println("GPDEBUG json is " + json);
 
         // then, we build the request by provising the url, the method and the body
-        Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .addHeader("Authorization", "Bearer " + currentLoggedUser.getAccess_token())
-                .build();
+        Request request;
+
+        if(isEdit){
+            url += "/" + eCommand.getSchedule().getId();
+            request = new Request.Builder()
+                    .url(url)
+                    .put(body)
+                    .addHeader("Authorization", "Bearer " + currentLoggedUser.getAccess_token())
+                    .build();
+        } else {
+            request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .addHeader("Authorization", "Bearer " + currentLoggedUser.getAccess_token())
+                    .build();
+        }
 
         client.newCall(request).enqueue(new Callback() {
 
@@ -216,7 +236,7 @@ public class CommandListActivity extends BaseActivity {
                 TypeToken<Created<Schedule>> typeToken = new TypeToken<Created<Schedule>>(){};
                 // create the login object using the response body string and gson parser
                 Created<Schedule> schedule = gson.fromJson(result, typeToken.getType());
-                postCommandApi(config, schedule.getObject().getId());
+                postCommandApi(config, schedule.getObject().getId(), isEdit);
 //                runOnUiThread(new Runnable() {
 //                    @Override
 //                    public void run() {
@@ -228,7 +248,7 @@ public class CommandListActivity extends BaseActivity {
         });
     }
 
-    public void postCommandApi(Boolean config, int schedule_id) throws IOException{
+    public void postCommandApi(Boolean config, int schedule_id, final boolean isEdit) throws IOException{
         url = getString(R.string.api_url) + "/command";
         String json = String.format("{\"%s\": %d, \"%s\": %b", "hardware_id", hardware.getId(), "configuration", config);
         json += schedule_id != -1? String.format(",\"%s\": %d", "schedule_id", schedule_id) : "";
@@ -238,11 +258,22 @@ public class CommandListActivity extends BaseActivity {
         System.out.println("GPDEBUG json is " + json);
 
         // then, we build the request by provising the url, the method and the body
-        Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .addHeader("Authorization", "Bearer " + currentLoggedUser.getAccess_token())
-                .build();
+        Request request;
+        if(isEdit){
+            url += "/" + eCommand.getId();
+            request = new Request.Builder()
+                    .url(url)
+                    .put(body)
+                    .addHeader("Authorization", "Bearer " + currentLoggedUser.getAccess_token())
+                    .build();
+        } else {
+            request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .addHeader("Authorization", "Bearer " + currentLoggedUser.getAccess_token())
+                    .build();
+        }
+        System.out.println(url);
 
         client.newCall(request).enqueue(new Callback() {
 
@@ -272,13 +303,19 @@ public class CommandListActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(CommandListActivity.this," Success" , Toast.LENGTH_LONG).show();
-                        if(command.getObject().getSchedule() != null){
-                            commands.add(command.getObject());
+                        if(!isEdit){
+                            Toast.makeText(CommandListActivity.this," Success" , Toast.LENGTH_LONG).show();
+                            if(command.getObject().getSchedule() != null){
+                                commands.add(command.getObject());
+                            }
+                            ArrayAdapter arrayAdapter = new CommandAdapter(CommandListActivity.this, commands, listView);
+                            // set the array adapter to the listview
+                            listView.setAdapter(arrayAdapter);
+                        } else {
+                            Toast.makeText(CommandListActivity.this,command.getMessage() , Toast.LENGTH_LONG).show();
+                            loadActivity();
                         }
-                        ArrayAdapter arrayAdapter = new CommandAdapter(CommandListActivity.this, commands, listView);
-                        // set the array adapter to the listview
-                        listView.setAdapter(arrayAdapter);
+
                     }
                 });
             }

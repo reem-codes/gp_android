@@ -1,6 +1,8 @@
 package com.reem_codes.gp_android.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,16 +15,31 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.reem_codes.gp_android.R;
 import com.reem_codes.gp_android.activity.CommandListActivity;
+import com.reem_codes.gp_android.activity.HardwareListActivity;
+import com.reem_codes.gp_android.activity.NewCommandActivity;
 import com.reem_codes.gp_android.activity.RaspberryActivity;
 import com.reem_codes.gp_android.model.Command;
+import com.reem_codes.gp_android.model.Created;
+import com.reem_codes.gp_android.model.Schedule;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 
 public class CommandAdapter extends ArrayAdapter<Command> {
+    public final static int LAUNCH_EDIT_COMMAND = 4;
+
     Context context;
     static Command command;
     ListView listView;
@@ -95,7 +112,15 @@ public class CommandAdapter extends ArrayAdapter<Command> {
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, String.format("You are id num %d", command.getId()), Toast.LENGTH_LONG).show();
+                command = getItem(position);
+                Intent intent = new Intent(context, NewCommandActivity.class);
+                intent.putExtra("isEdit", true);
+                intent.putExtra("hardware", HardwareListActivity.hardwares.get(command.getHardware_id()).getName());
+                Gson gson = new Gson();
+                intent.putExtra("command", gson.toJson(command));
+                System.out.println("GPDEBUG " + gson.toJson(command));
+                System.out.println("GPDEBUG " + command.isConfiguration());
+                ((Activity)context).startActivityForResult(intent, LAUNCH_EDIT_COMMAND);
             }
         });
         return item;
@@ -127,4 +152,24 @@ public class CommandAdapter extends ArrayAdapter<Command> {
 
         return result.toString();
     }
+
+    public static boolean[] isSelected(int x){
+        /**
+         * This method takes an integer number,
+         * converts it to binary
+         * and then returns an array of on positions */
+        String binary = toBinary(x, 7);
+        boolean[] positions = new boolean[7];
+        for(int i = 0; i < binary.length(); i++){
+            if(binary.charAt(i) == '1'){
+                positions[i] = true;
+            }else {
+                positions[i] = false;
+
+            }
+        }
+
+        return positions;
+    }
+
 }

@@ -10,12 +10,12 @@
 * GET /hardware?raspberry_id=
 * GET /command?hardware_id=
 
-* PUT /raspberry_user
 * POST /hardware
 * POST /schedule
 * POST /command
 
 * PUT /command
+* PUT /raspberry_user
 
 * DELETE /raspberry_user
 * DELETE /command
