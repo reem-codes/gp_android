@@ -30,7 +30,7 @@ import java.util.List;
 
 
 
-public class HardwareListActivity extends AppCompatActivity {
+public class HardwareListActivity extends BaseActivity {
     final int LAUNCH_ADD_HARDWARE = 3;
 
     SliderView sliderView;
@@ -46,8 +46,7 @@ public class HardwareListActivity extends AppCompatActivity {
         final int raspberry_id = intent.getIntExtra("raspberry_index", -1);
         if(raspberry_id != -1) {
             Toast.makeText(this, "the raspberry clicked is " + RaspberryActivity.raspberries.get(raspberry_id).getName(), Toast.LENGTH_LONG).show();
-            TextView toolbarText = (TextView) findViewById(R.id.toolbar_title);
-            toolbarText.setText(RaspberryActivity.raspberries.get(raspberry_id).getName() + "'s Hardware List");
+            super.setToolbar(RaspberryActivity.raspberries.get(raspberry_id).getName() + "'s Hardware List");
 
         }
 
@@ -120,4 +119,10 @@ public class HardwareListActivity extends AppCompatActivity {
             }
         }
     }//onActivityResult
+
+    @Override
+    public void loadActivity() {
+        Toast.makeText(this, "Reload Activity",Toast.LENGTH_LONG).show();
+
+    }
 }

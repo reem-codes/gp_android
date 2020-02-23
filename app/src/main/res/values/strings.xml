@@ -1,5 +1,5 @@
 <resources>
     <string name="register_here_msg">This is an <b>underline</b>.</string>
     <string name="app_name">GpSmartHomeAndroid</string>
-    <string name="api_url">http://192.168.43.122:5000</string>
+    <string name="api_url">https://gp.reem-codes.com</string>
 </resources>

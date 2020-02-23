@@ -1,6 +1,6 @@
 package com.reem_codes.gp_android.model;
 
-public class Schedule {
+public class Schedule extends Base{
     private int id;
     private int days;
     private String time;

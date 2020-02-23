@@ -8,12 +8,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.reem_codes.gp_android.R;
 import com.reem_codes.gp_android.model.Login;
+import com.reem_codes.gp_android.model.User;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -22,24 +24,62 @@ import java.util.regex.Pattern;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
-
+    TextView registerView;
     /** FIRST STEP: DEFINE THE CLIENT AND THE TYPE **/
     OkHttpClient client = new OkHttpClient();
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
+    String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        registerView = (TextView) findViewById(R.id.registerPage);
+        url = getString(R.string.api_url) + "/login";
+
+        registerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+        Intent intent = getIntent();
+        if(intent != null) {
+            String registerEmail = intent.getStringExtra("email");
+            String registerPassword = intent.getStringExtra("password");
+            if(registerEmail != null && registerPassword != null && !registerEmail.equals("") && !registerPassword.equals("")){
+                try {
+                    postLoginApi(url, registerEmail, registerPassword);
+                } catch (IOException e) {
+                    Toast.makeText(LoginActivity.this, "Login Failed, please check network and try again", Toast.LENGTH_LONG).show();
+                }
+            }
+
+        }
+
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.reem_codes.gp_android", Context.MODE_PRIVATE);
+        String login = sharedPreferences.getString("login", null);
+        if(login != null) {
+            intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
+//        Gson gson = new Gson();
+//        TypeToken<Login> token = new TypeToken<Login>(){};
+//        Login currentLoggedUser = gson.fromJson(login, token.getType());
+
     }
+
+
 
     public void login(View view) {
         /** SECOND STEP: VALIDATE THE INPUT AND CALL THE API METHOD **/
@@ -47,7 +87,6 @@ public class LoginActivity extends AppCompatActivity {
         EditText passwordView = (EditText) findViewById(R.id.password);
         String email = emailView.getText().toString();
         String password = passwordView.getText().toString();
-        String url = getString(R.string.api_url) + "/login";
         System.out.println("GPDEBUG url is " + url);
         if(!isEmailValid(email))
         {

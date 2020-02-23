@@ -33,6 +33,7 @@
             android:windowSoftInputMode="adjustResize|stateHidden|adjustPan" />
         <activity android:name=".activity.RaspberryActivity" />
         <activity android:name=".activity.NewCommandActivity" />
+        <activity android:name=".activity.RegisterActivity" />
     </application>
 
 </manifest>

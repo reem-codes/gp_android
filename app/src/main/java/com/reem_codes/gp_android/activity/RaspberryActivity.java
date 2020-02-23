@@ -1,9 +1,15 @@
 package com.reem_codes.gp_android.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,15 +28,15 @@ import com.reem_codes.gp_android.model.Raspberry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RaspberryActivity extends AppCompatActivity {
+public class RaspberryActivity extends BaseActivity {
 
     public static List<Raspberry> raspberries;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_raspberry);
-        TextView toolbarText = (TextView) findViewById(R.id.toolbar_title);
-        toolbarText.setText("Raspberry List");
+        super.setToolbar("Raspberry List");
 
         /* create a mock list
         TODO: take the arraylist from the api
@@ -64,6 +70,8 @@ public class RaspberryActivity extends AppCompatActivity {
             }
         });
     }
+
+
     private void startQRScanner() {
         new IntentIntegrator(this).initiateScan();
     }
@@ -93,4 +101,9 @@ public class RaspberryActivity extends AppCompatActivity {
 //        startActivity(intent);
     }
 
+    @Override
+    public void loadActivity() {
+        Toast.makeText(this, "Reload Activity",Toast.LENGTH_LONG).show();
+
+    }
 }

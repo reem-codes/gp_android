@@ -1,6 +1,6 @@
 package com.reem_codes.gp_android.model;
 
-public class Raspberry {
+public class Raspberry extends Base{
 
     private int id;
     private String name;

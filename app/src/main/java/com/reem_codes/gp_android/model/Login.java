@@ -1,13 +1,11 @@
 package com.reem_codes.gp_android.model;
 
-public class Login {
-    private String message;
+public class Login extends Base{
     private String access_token;
     private User user;
 
-    public Login(String access_token, User user, String message) {
+    public Login(String access_token, User user) {
         this.access_token = access_token;
-        this.message = message;
         this.user = user;
     }
 
@@ -28,13 +26,5 @@ public class Login {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 }

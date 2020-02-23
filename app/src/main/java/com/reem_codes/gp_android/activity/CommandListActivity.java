@@ -23,7 +23,7 @@ import java.util.List;
 
 import static com.reem_codes.gp_android.adapter.DayAdapter.days;
 
-public class CommandListActivity extends AppCompatActivity {
+public class CommandListActivity extends BaseActivity {
 
     public static List<Command> commands;
     final int LAUNCH_ADD_COMMAND = 1;
@@ -36,8 +36,7 @@ public class CommandListActivity extends AppCompatActivity {
         int raspberry_id = intent.getIntExtra("hardware_index", -1);
         if(raspberry_id != -1) {
             Toast.makeText(this, "the hardware clicked is " + HardwareListActivity.hardwares.get(raspberry_id).getName(), Toast.LENGTH_LONG).show();
-            TextView toolbarText = (TextView) findViewById(R.id.toolbar_title);
-            toolbarText.setText(HardwareListActivity.hardwares.get(raspberry_id).getName() + "'s Command List");
+            super.setToolbar(HardwareListActivity.hardwares.get(raspberry_id).getName() + "'s Command List");
 
         }
 
@@ -107,4 +106,10 @@ public class CommandListActivity extends AppCompatActivity {
             }
         }
     }//onActivityResult
+
+    @Override
+    public void loadActivity() {
+        Toast.makeText(this, "Reload Activity",Toast.LENGTH_LONG).show();
+
+    }
 }

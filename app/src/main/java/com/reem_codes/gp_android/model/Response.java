@@ -1,7 +1,6 @@
 package com.reem_codes.gp_android.model;
 
-public class Response {
-
+public class Response extends Base{
     private String isRead;
     private String updateAt;
     private  int executionTime;

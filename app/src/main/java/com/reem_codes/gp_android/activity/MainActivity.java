@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         Button hardware = (Button) findViewById(R.id.hardware);
         Button addCommand = (Button) findViewById(R.id.add_command);
         Button schedule = (Button) findViewById(R.id.schedule);
+        Button addHardware = (Button) findViewById(R.id.add_hardware);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +63,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), ScheduleActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        addHardware.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), NewHardwareActivity.class);
                 startActivity(intent);
             }
         });

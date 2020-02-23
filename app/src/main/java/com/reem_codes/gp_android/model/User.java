@@ -1,6 +1,6 @@
 package com.reem_codes.gp_android.model;
 
-public class User {
+public class User extends Base{
     private String email;
     private String updateAt;
     private int id;

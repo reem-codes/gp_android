@@ -1,6 +1,6 @@
 package com.reem_codes.gp_android.model;
 
-public class Command {
+public class Command extends Base{
 
     private int id;
     private String updateAt ;

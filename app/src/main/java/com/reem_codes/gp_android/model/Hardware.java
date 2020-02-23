@@ -1,6 +1,6 @@
 package com.reem_codes.gp_android.model;
 
-public class Hardware {
+public class Hardware extends Base{
     private int id;
     private String updateAt;
     private String name;
