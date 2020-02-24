@@ -5,19 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.reem_codes.gp_android.R;
-import com.reem_codes.gp_android.model.Command;
 import com.reem_codes.gp_android.model.Hardware;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -37,7 +33,7 @@ public class HardwareAdapter extends ArrayAdapter<Hardware> {
         // specify each item's layout
         View item = inflater.inflate(R.layout.hardware_item_adapter, parent, false);
 
-        // get the current command from the list passed to the adapter
+        // get the current hardware from the list passed to the adapter
         final Hardware hardware = getItem(position);
 
         // take the views from the layout
@@ -45,6 +41,8 @@ public class HardwareAdapter extends ArrayAdapter<Hardware> {
         ImageView image = (ImageView) item.findViewById(R.id.icon);
 
         name.setText(hardware.getName());
+
+        // set the icon
         int resID = context.getResources().getIdentifier( "other", "drawable", context.getPackageName());
 
         if( hardware.getIcon() != null) {

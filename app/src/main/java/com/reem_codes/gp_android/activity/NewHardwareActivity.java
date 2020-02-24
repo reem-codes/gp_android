@@ -60,9 +60,7 @@ public class NewHardwareActivity extends AppCompatActivity {
                 // If user change the default selection
                 // First item is disable and it is used for hint
                 // Notify the selected item text
-                Toast.makeText
-                        (getApplicationContext(), "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
-                        .show();
+
                 imageSelectedId = position;
 
             }
@@ -99,7 +97,7 @@ public class NewHardwareActivity extends AppCompatActivity {
                 String sgpio = gpioEdit.getText().toString();
 
                 if(sgpio.length() == 0) {
-                    Toast.makeText(getApplicationContext(), "GPIO cannot be empty", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "GPIO cannot be empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 gpio = Integer.valueOf(sgpio);

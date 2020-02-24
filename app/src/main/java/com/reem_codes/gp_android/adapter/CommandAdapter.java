@@ -19,14 +19,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.reem_codes.gp_android.R;
 import com.reem_codes.gp_android.activity.BaseActivity;
-import com.reem_codes.gp_android.activity.CommandListActivity;
 import com.reem_codes.gp_android.activity.HardwareListActivity;
 import com.reem_codes.gp_android.activity.NewCommandActivity;
-import com.reem_codes.gp_android.activity.RaspberryActivity;
 import com.reem_codes.gp_android.model.Base;
 import com.reem_codes.gp_android.model.Command;
-import com.reem_codes.gp_android.model.Created;
-import com.reem_codes.gp_android.model.Schedule;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,7 +31,6 @@ import java.util.List;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
@@ -155,7 +150,7 @@ public class CommandAdapter extends ArrayAdapter<Command> {
             }
         });
 
-        // if the user clicked on the edit button, open the commandActivity
+        // if the user clicked on the edit button, open the NewCommandActivity
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

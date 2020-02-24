@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.method.DateTimeKeyListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,8 +22,6 @@ import com.google.android.flexbox.JustifyContent;
 import com.reem_codes.gp_android.R;
 import com.reem_codes.gp_android.adapter.CommandAdapter;
 import com.reem_codes.gp_android.adapter.DayAdapter;
-
-import java.util.Date;
 
 public class ScheduleActivity extends AppCompatActivity {
 
@@ -99,19 +96,19 @@ public class ScheduleActivity extends AppCompatActivity {
                 String m = minuteEdit.getText().toString();
 
                 if(h.length() == 0 || m.length() == 0) {
-                    Toast.makeText(getApplicationContext(), "Hours and Minutes cannot be empty", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Hours and Minutes cannot be empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 hour = Integer.valueOf(h);
                 minute = Integer.valueOf(m);
 
                 if(hour > 12 || hour < 1) {
-                    Toast.makeText(getApplicationContext(), "Hours must be between 1 and 12", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Hours must be between 1 and 12", Toast.LENGTH_SHORT).show();
                     return;
 
                 }
                 if(minute > 59 || minute < 0) {
-                    Toast.makeText(getApplicationContext(), "Minutes must be between 0 and 59", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Minutes must be between 0 and 59", Toast.LENGTH_SHORT).show();
                     return;
 
                 }
@@ -122,7 +119,7 @@ public class ScheduleActivity extends AppCompatActivity {
                     }
                 }
                 if(countOn == 0){
-                    Toast.makeText(getApplicationContext(), "You must select one day at east", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "You must select one day at east", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 int daysInt = 0;
@@ -133,7 +130,6 @@ public class ScheduleActivity extends AppCompatActivity {
                 }
 
                 isAM = am.isChecked();
-                Toast.makeText(getApplicationContext(), ""+ daysInt, Toast.LENGTH_SHORT).show();
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("hour", hour);
                 returnIntent.putExtra("minute", minute);

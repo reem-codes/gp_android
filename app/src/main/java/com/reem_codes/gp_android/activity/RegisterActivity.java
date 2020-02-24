@@ -1,8 +1,6 @@
 package com.reem_codes.gp_android.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -15,12 +13,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.reem_codes.gp_android.R;
 import com.reem_codes.gp_android.model.Created;
-import com.reem_codes.gp_android.model.Login;
 import com.reem_codes.gp_android.model.User;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -64,17 +59,17 @@ public class RegisterActivity extends AppCompatActivity {
         System.out.println("GPDEBUG url is " + url);
         if(!isEmailValid(email))
         {
-            Toast.makeText(RegisterActivity.this, "email is incorrect", Toast.LENGTH_LONG).show();
+            Toast.makeText(RegisterActivity.this, "email is incorrect", Toast.LENGTH_SHORT).show();
         }
         if(password.length() == 0){
-            Toast.makeText(RegisterActivity.this, "You must enter a password", Toast.LENGTH_LONG).show();
+            Toast.makeText(RegisterActivity.this, "You must enter a password", Toast.LENGTH_SHORT).show();
         }
         else {
             /** when using any thing that require permissions, wrap the method with a try catch**/
             try {
                 postUserApi(url, email, password);
             } catch (Exception e) {
-                Toast.makeText(RegisterActivity.this, "Login Failed, please check network and try again", Toast.LENGTH_LONG).show();
+                Toast.makeText(RegisterActivity.this, "Login Failed, please check network and try again", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -126,7 +121,7 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             // display the error message to the user
-                            Toast.makeText(RegisterActivity.this, user.getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegisterActivity.this, user.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -137,7 +132,7 @@ public class RegisterActivity extends AppCompatActivity {
                     RegisterActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(RegisterActivity.this, user.getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegisterActivity.this, user.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
                     // direct user to login page
@@ -151,7 +146,7 @@ public class RegisterActivity extends AppCompatActivity {
                     RegisterActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(RegisterActivity.this, "Registering Failed, please check network and try again", Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegisterActivity.this, "Registering Failed, please check network and try again", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

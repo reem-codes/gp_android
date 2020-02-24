@@ -5,23 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.reem_codes.gp_android.R;
-import com.reem_codes.gp_android.activity.RaspberryActivity;
-import com.reem_codes.gp_android.activity.ScheduleActivity;
-import com.reem_codes.gp_android.model.Raspberry;
-
-import java.util.List;
 
 
 public class HardwareSpinnerAdapter extends ArrayAdapter<String>{

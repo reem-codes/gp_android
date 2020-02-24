@@ -16,8 +16,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.reem_codes.gp_android.R;
 import com.reem_codes.gp_android.model.Command;
-import com.reem_codes.gp_android.model.Hardware;
-import com.reem_codes.gp_android.model.Login;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -74,15 +72,7 @@ public class NewCommandActivity extends Activity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItemText = (String) parent.getItemAtPosition(position);
-                // If user change the default selection
-                // First item is disable and it is used for hint
-                // Notify the selected item text
-//                Toast.makeText
-//                        (getApplicationContext(), "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
-//                        .show();
                 isOn = position == 0;
-
             }
 
             @Override
@@ -95,6 +85,7 @@ public class NewCommandActivity extends Activity {
             spinner.setSelection(command.isConfiguration()? spinnerArrayAdapter.getPosition(configs[0]) : spinnerArrayAdapter.getPosition(configs[1]));
 
         }
+        /* user may cancel the addition operation */
         ImageButton close = (ImageButton) findViewById(R.id.close);
         close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,6 +96,7 @@ public class NewCommandActivity extends Activity {
             }
         });
 
+        /* validation and execution once the user is done */
         Button done = (Button) findViewById(R.id.done);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,10 +150,10 @@ public class NewCommandActivity extends Activity {
                 minute = data.getIntExtra("minute", -1);
                 days = data.getIntExtra("days", -1);
 
-                Toast.makeText(this, isEdit ? "Schedule edited" : "Schedule added", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, isEdit ? "Schedule edited" : "Schedule added", Toast.LENGTH_SHORT).show();
             }
             if (resultCode == Activity.RESULT_CANCELED) {
-                Toast.makeText(this, "no schedule added", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "no schedule added", Toast.LENGTH_SHORT).show();
             }
         }
     }//onActivityResult

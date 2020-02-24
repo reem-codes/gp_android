@@ -14,8 +14,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.reem_codes.gp_android.R;
 import com.reem_codes.gp_android.adapter.CommandAdapter;
-import com.reem_codes.gp_android.adapter.HardwareAdapter;
-import com.reem_codes.gp_android.model.Base;
 import com.reem_codes.gp_android.model.Command;
 import com.reem_codes.gp_android.model.Created;
 import com.reem_codes.gp_android.model.Hardware;
@@ -42,8 +40,10 @@ public class CommandListActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_command_list);
+        // check if user is properly logged in, or redirect to login page
         checkUser(this);
 
+        // get the parent hardware that was clicked in the previous activity
         Intent intent = getIntent();
         int hardware_index = intent.getIntExtra("hardware_index", -1);
         if(hardware_index != -1) {
@@ -54,16 +54,14 @@ public class CommandListActivity extends BaseActivity {
 
         }
 
-        /* list of commands
-        TODO: get list from server
-         */
+
         commands = new ArrayList<>();
-        // get the listview
         listView = (ListView) findViewById(R.id.commands);
-        // make an array adapter for the listview of an object of type array adabter
 
 
-        /* new command **/
+        /** new command
+        * when the add command button is clicked, the NewCommand activity starts returning the command and the scheduling info if any
+        * **/
         ImageButton addCommand = (ImageButton) findViewById(R.id.add_command);
         addCommand.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,14 +82,16 @@ public class CommandListActivity extends BaseActivity {
         try {
             getCommandApi();
         } catch (IOException e) {
-            Toast.makeText(this, "please check network and try again",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "please check network and try again",Toast.LENGTH_SHORT).show();
         }
     }
 
 
     public void getCommandApi() throws IOException{
+        /**
+         * This method gets the command list from the api and updates the adapter
+         */
         url = getString(R.string.api_url) + "/command?schedule_id=not_null&hardware_id="+ hardware.getId();
-        // then, we build the request by provising the url, the method and the body
         Request request = new Request.Builder()
                 .url(url)
                 .get()
@@ -105,7 +105,7 @@ public class CommandListActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(CommandListActivity.this, "please check network and try again", Toast.LENGTH_LONG).show();
+                        Toast.makeText(CommandListActivity.this, "please check network and try again", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -115,21 +115,15 @@ public class CommandListActivity extends BaseActivity {
                 String result = response.body().string();
                 System.out.println("GPDEBUG results are " + result);
 
-
-                // use Gson to parse from a string to objects and lists
-                // first create Gson object
+                // parse result from string into object
                 Gson gson = new Gson();
-                // specify the object type: is the string a json representation of a command? a user? in our case: login
                 TypeToken<ArrayList<Command>> typeToken = new TypeToken<ArrayList<Command>>(){};
-                // create the login object using the response body string and gson parser
                 commands = gson.fromJson(result, typeToken.getType());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(CommandListActivity.this," Success" , Toast.LENGTH_LONG).show();
-
+                        // update array adapter
                         ArrayAdapter arrayAdapter = new CommandAdapter(CommandListActivity.this, commands, listView);
-                        // set the array adapter to the listview
                         listView.setAdapter(arrayAdapter);
 
                     }
@@ -142,6 +136,10 @@ public class CommandListActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        /** once the results are returned from the new command activity, parse those results accordingly
+         * check if the user cancelled the operation. If not upload the command data to the server
+         * if it was scheduled the schedule must be posted/put first. Then the command
+         */
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == LAUNCH_ADD_COMMAND || requestCode == CommandAdapter.LAUNCH_EDIT_COMMAND) {
             if (resultCode == Activity.RESULT_OK) {
@@ -165,19 +163,19 @@ public class CommandListActivity extends BaseActivity {
                     try {
                         postPutScheduleApi(sJson, config, isEdit);
                     } catch (IOException e) {
-                        Toast.makeText(this, "schedule was not added. please check network and try again",Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "schedule was not added. please check network and try again",Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {
                     try {
                         postPutCommandApi(config, -1, isEdit);
                     } catch (IOException e) {
-                        Toast.makeText(this, "schedule was not added. please check network and try again",Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "schedule was not added. please check network and try again",Toast.LENGTH_SHORT).show();
                     }
                 }
             }
             if (resultCode == Activity.RESULT_CANCELED) {
-                Toast.makeText(this, "no command created", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "no command created", Toast.LENGTH_SHORT).show();
             }
         }
     }//onActivityResult
@@ -187,7 +185,6 @@ public class CommandListActivity extends BaseActivity {
         RequestBody body = RequestBody.create(JSON, json);
         System.out.println("GPDEBUG json is " + json);
 
-        // then, we build the request by provising the url, the method and the body
         Request request;
 
         if(isEdit){
@@ -212,7 +209,7 @@ public class CommandListActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(CommandListActivity.this, "please check network and try again", Toast.LENGTH_LONG).show();
+                        Toast.makeText(CommandListActivity.this, "please check network and try again", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -221,23 +218,10 @@ public class CommandListActivity extends BaseActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
                 System.out.println("GPDEBUG results are " + result);
-
-
-                // use Gson to parse from a string to objects and lists
-                // first create Gson object
                 Gson gson = new Gson();
-                // specify the object type: is the string a json representation of a command? a user? in our case: login
                 TypeToken<Created<Schedule>> typeToken = new TypeToken<Created<Schedule>>(){};
-                // create the login object using the response body string and gson parser
                 Created<Schedule> schedule = gson.fromJson(result, typeToken.getType());
                 postPutCommandApi(config, schedule.getObject().getId(), isEdit);
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//                    }
-//                });
-
             }
         });
     }
@@ -251,7 +235,6 @@ public class CommandListActivity extends BaseActivity {
         RequestBody body = RequestBody.create(JSON, json);
         System.out.println("GPDEBUG json is " + json);
 
-        // then, we build the request by provising the url, the method and the body
         Request request;
         if(isEdit){
             url += "/" + eCommand.getId();
@@ -276,7 +259,7 @@ public class CommandListActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(CommandListActivity.this, "command not made, please check network and try again", Toast.LENGTH_LONG).show();
+                        Toast.makeText(CommandListActivity.this, "command not made, please check network and try again", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -286,30 +269,22 @@ public class CommandListActivity extends BaseActivity {
                 String result = response.body().string();
                 System.out.println("GPDEBUG results are " + result);
 
-
-                // use Gson to parse from a string to objects and lists
-                // first create Gson object
                 Gson gson = new Gson();
-                // specify the object type: is the string a json representation of a command? a user? in our case: login
                 TypeToken<Created<Command>> typeToken = new TypeToken<Created<Command>>(){};
-                // create the login object using the response body string and gson parser
                 final Created<Command> command = gson.fromJson(result, typeToken.getType());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         if(!isEdit){
-                            Toast.makeText(CommandListActivity.this," Success" , Toast.LENGTH_LONG).show();
                             if(command.getObject().getSchedule() != null){
                                 commands.add(command.getObject());
                             }
                             ArrayAdapter arrayAdapter = new CommandAdapter(CommandListActivity.this, commands, listView);
-                            // set the array adapter to the listview
                             listView.setAdapter(arrayAdapter);
                         } else {
-                            Toast.makeText(CommandListActivity.this,command.getMessage() , Toast.LENGTH_LONG).show();
+                            Toast.makeText(CommandListActivity.this,command.getMessage() , Toast.LENGTH_SHORT).show();
                             loadActivity();
                         }
-
                     }
                 });
             }

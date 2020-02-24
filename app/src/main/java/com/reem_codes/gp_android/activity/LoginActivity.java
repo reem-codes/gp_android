@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     postLoginApi(url, registerEmail, registerPassword);
                 } catch (IOException e) {
-                    Toast.makeText(LoginActivity.this, "Login Failed, please check network and try again", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "Login Failed, please check network and try again", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -90,17 +90,17 @@ public class LoginActivity extends AppCompatActivity {
         System.out.println("GPDEBUG url is " + url);
         if(!isEmailValid(email))
         {
-            Toast.makeText(LoginActivity.this, "email is incorrect", Toast.LENGTH_LONG).show();
+            Toast.makeText(LoginActivity.this, "email is incorrect", Toast.LENGTH_SHORT).show();
         }
         if(password.length() == 0){
-            Toast.makeText(LoginActivity.this, "You must enter a password", Toast.LENGTH_LONG).show();
+            Toast.makeText(LoginActivity.this, "You must enter a password", Toast.LENGTH_SHORT).show();
         }
         else {
             /** when using any thing that require permissions, wrap the method with a try catch**/
             try {
                 postLoginApi(url, email, password);
             } catch (Exception e) {
-                Toast.makeText(LoginActivity.this, "Login Failed, please check network and try again", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Login Failed, please check network and try again", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -152,7 +152,7 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             // display the error message to the user
-                            Toast.makeText(LoginActivity.this, login.getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, login.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -163,13 +163,6 @@ public class LoginActivity extends AppCompatActivity {
                     SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.reem_codes.gp_android", Context.MODE_PRIVATE);
                     sharedPreferences.edit().putString("login", gson.toJson(login)).apply();
 
-                    // display successful login message to user
-                    LoginActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(LoginActivity.this, "successful login", Toast.LENGTH_LONG).show();
-                        }
-                    });
                     // direct user to main page
                     Intent intent = new Intent(getApplicationContext(), RaspberryActivity.class);
                     startActivity(intent);
@@ -179,7 +172,7 @@ public class LoginActivity extends AppCompatActivity {
                     LoginActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(LoginActivity.this, "Login Failed, please check network and try again", Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, "Login Failed, please check network and try again", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

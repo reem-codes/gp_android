@@ -7,11 +7,16 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ImageButton
-        android:layout_marginRight="24dp"
-        android:id="@+id/delete_raspberry"
+        android:id="@+id/delete"
         style="@style/icons"
-        android:background="@drawable/delete" />
-
+        android:layout_marginRight="8dp"
+        android:background="@drawable/delete"/>
+    <ImageButton
+        android:id="@+id/edit"
+        style="@style/icons"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/edit"/>
     <TextView
         android:textSize="20sp"
         android:id="@+id/raspberry"
