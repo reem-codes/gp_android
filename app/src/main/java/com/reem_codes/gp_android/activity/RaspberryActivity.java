@@ -18,6 +18,7 @@ import com.reem_codes.gp_android.R;
 import com.reem_codes.gp_android.adapter.RaspberryAdapter;
 import com.reem_codes.gp_android.model.Created;
 import com.reem_codes.gp_android.model.Raspberry;
+import com.reem_codes.gp_android.service.ResponseService;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class RaspberryActivity extends BaseActivity {
         setContentView(R.layout.activity_raspberry);
         super.setToolbar("Raspberry List");
         checkUser(this);
+        startService(new Intent(this, ResponseService.class));
 
 
         raspberries= new ArrayList<>();

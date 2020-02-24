@@ -16,21 +16,24 @@
         android:theme="@style/AppTheme.NoActionBar.FullScreen"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:label">
-        <activity android:name=".activity.NewHardwareActivity"></activity>
+        <service
+            android:name=".service.ResponseService"
+            android:enabled="true"
+            android:exported="true"></service>
+
+        <activity android:name=".activity.NewHardwareActivity" />
         <activity android:name=".activity.ScheduleActivity" />
         <activity android:name=".activity.HardwareListActivity" />
         <activity android:name=".activity.CommandListActivity" />
         <activity android:name=".activity.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activity.LoginActivity"
             android:windowSoftInputMode="adjustResize|stateHidden|adjustPan">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".activity.RaspberryActivity" />
         <activity android:name=".activity.NewCommandActivity" />
