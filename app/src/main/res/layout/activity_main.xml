@@ -1,63 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:columnCount="2"
     tools:context=".activity.MainActivity">
 
     <Button
         style="@style/button"
         android:id="@+id/login"
         android:text="Login"
-        android:layout_alignParentLeft="true"
         android:layout_width="150dp"
         android:layout_height="wrap_content" />
     <Button
         style="@style/button"
-        android:layout_toRightOf="@id/login"
         android:id="@+id/raspberry"
         android:text="Raspberries"
         android:layout_width="150dp"
         android:layout_height="wrap_content" />
     <Button
-        android:layout_below="@id/login"
         style="@style/button"
         android:id="@+id/command"
         android:text="Commands"
         android:layout_width="150dp"
         android:layout_height="wrap_content" />
     <Button
-        android:layout_below="@id/raspberry"
-        android:layout_toRightOf="@+id/command"
         style="@style/button"
         android:id="@+id/hardware"
         android:text="Hardware"
         android:layout_width="150dp"
         android:layout_height="wrap_content" />
     <Button
-        android:layout_below="@id/command"
-        android:layout_alignParentLeft="true"
         style="@style/button"
         android:id="@+id/add_command"
         android:text="Add Command"
         android:layout_width="150dp"
         android:layout_height="wrap_content" />
     <Button
-        android:layout_below="@id/hardware"
-        android:layout_toRightOf="@id/add_command"
         style="@style/button"
         android:id="@+id/schedule"
         android:text="schedule"
         android:layout_width="150dp"
         android:layout_height="wrap_content" />
     <Button
-        android:layout_below="@id/add_command"
-        android:layout_alignParentLeft="true"
         style="@style/button"
         android:id="@+id/add_hardware"
         android:text="Add Hardware"
         android:layout_width="150dp"
         android:layout_height="wrap_content" />
-</RelativeLayout>
+    <Button
+        style="@style/button"
+        android:id="@+id/notify"
+        android:text="Notify Me"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content" />
+</GridLayout>

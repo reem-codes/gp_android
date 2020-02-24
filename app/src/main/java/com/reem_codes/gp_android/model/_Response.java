@@ -1,31 +1,29 @@
 package com.reem_codes.gp_android.model;
 
-public class Response extends Base{
-    private String isRead;
+public class _Response extends Base{
+    private boolean isRead;
     private String updateAt;
-    private  int executionTime;
-    private String message;
+    private  String executionTime;
     private int id;
-    private  String isDone;
+    private  boolean isDone;
 
-    public Response() {
+    public _Response() {
 
     }
 
-    public Response(String isRead, String updateAt, int executionTime, String message, int id, String isDone) {
+    public _Response(boolean isRead, String updateAt, String executionTime, int id, boolean isDone) {
         this.isRead = isRead;
         this.updateAt = updateAt;
         this.executionTime = executionTime;
-        this.message = message;
         this.id = id;
         this.isDone = isDone;
     }
 
-    public String getIsRead() {
+    public boolean getIsRead() {
         return isRead;
     }
 
-    public void setIsRead(String isRead) {
+    public void setIsRead(boolean isRead) {
         this.isRead = isRead;
     }
 
@@ -37,21 +35,14 @@ public class Response extends Base{
         this.updateAt = updateAt;
     }
 
-    public int getExecutionTime() {
+    public String getExecutionTime() {
         return executionTime;
     }
 
-    public void setExecutionTime(int executionTime) {
+    public void setExecutionTime(String executionTime) {
         this.executionTime = executionTime;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
     public int getId() {
         return id;
@@ -61,11 +52,11 @@ public class Response extends Base{
         this.id = id;
     }
 
-    public String getIsDone() {
+    public boolean getIsDone() {
         return isDone;
     }
 
-    public void setIsDone(String isDone) {
+    public void setIsDone(boolean isDone) {
         this.isDone = isDone;
     }
 }
