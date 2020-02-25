@@ -51,7 +51,7 @@
         <GridView
             android:paddingTop="16dp"
             android:id="@+id/grid_view"
-            android:columnWidth="100dp"
+            android:columnWidth="150dp"
             android:gravity="center"
             android:clipToPadding="false"
             android:horizontalSpacing="16dp"

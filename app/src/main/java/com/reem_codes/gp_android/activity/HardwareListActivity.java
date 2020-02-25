@@ -44,6 +44,7 @@ public class HardwareListActivity extends BaseActivity {
     public static List<Hardware> hardwares;
     Raspberry raspberry;
     GridView gridView;
+    Hardware eHardware;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,16 +102,22 @@ public class HardwareListActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == LAUNCH_ADD_HARDWARE) {
+        if (requestCode == LAUNCH_ADD_HARDWARE || requestCode == HardwareAdapter.LAUNCH_EDIT_HARDWARE) {
             if (resultCode == Activity.RESULT_OK) {
                 int gpio = data.getIntExtra("gpio", -1);
                 String name = data.getStringExtra("name");
                 String desc = data.getStringExtra("desc");
                 String icon = data.getStringExtra("icon");
+                boolean isEdit = data.getBooleanExtra("isEdit", false);
+                if(isEdit){
+                    TypeToken<Hardware> token = new TypeToken<Hardware>(){};
+                    eHardware = (new Gson()).fromJson(data.getStringExtra("hardware"), token.getType());
+                    System.out.println("GPDEBUG IS EDIT");
+                }
 
                 String text = String.format("{\"name\":\"%s\", \"gpio\":%d,\"icon\": \"%s\", \"desc\": \"%s\", \"raspberry_id\": %d}", name, gpio, icon, desc, raspberry.getId());
                 try {
-                    postHardwareApi(text);
+                    postPutHardwareApi(text, isEdit);
                 } catch (IOException e) {
                     Toast.makeText(this, "please check network and try again",Toast.LENGTH_LONG).show();
                 }
@@ -164,7 +171,7 @@ public class HardwareListActivity extends BaseActivity {
                     @Override
                     public void run() {
                         // once the results arrive, update the arrayadapter
-                        ArrayAdapter arrayAdapter = new HardwareAdapter(HardwareListActivity.this, hardwares);
+                        ArrayAdapter arrayAdapter = new HardwareAdapter(HardwareListActivity.this, hardwares, gridView);
                         gridView.setAdapter(arrayAdapter);
                     }
                 });
@@ -172,18 +179,30 @@ public class HardwareListActivity extends BaseActivity {
         });
     }
 
-    public void postHardwareApi(String json) throws IOException{
+    public void postPutHardwareApi(String json, final boolean isEdit) throws IOException{
         url = getString(R.string.api_url) + "/hardware";
 
         RequestBody body = RequestBody.create(JSON, json);
         System.out.println("GPDEBUG json is " + json);
 
-        Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .addHeader("Authorization", "Bearer " + currentLoggedUser.getAccess_token())
-                .build();
 
+        Request request;
+
+        if(isEdit){
+            url += "/" + eHardware.getId();
+            request = new Request.Builder()
+                    .url(url)
+                    .put(body)
+                    .addHeader("Authorization", "Bearer " + currentLoggedUser.getAccess_token())
+                    .build();
+
+        } else {
+            request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .addHeader("Authorization", "Bearer " + currentLoggedUser.getAccess_token())
+                    .build();
+        }
         client.newCall(request).enqueue(new Callback() {
 
             @Override
@@ -208,11 +227,17 @@ public class HardwareListActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(hardware.getObject() != null){
-                            hardwares.add(hardware.getObject());
+                        if(!isEdit) {
+                            if (hardware.getObject() != null) {
+                                hardwares.add(hardware.getObject());
+                            }
+                            ArrayAdapter arrayAdapter = new HardwareAdapter(HardwareListActivity.this, hardwares, gridView);
+                            gridView.setAdapter(arrayAdapter);
                         }
-                        ArrayAdapter arrayAdapter = new HardwareAdapter(HardwareListActivity.this, hardwares);
-                        gridView.setAdapter(arrayAdapter);
+                        else {
+                            Toast.makeText(HardwareListActivity.this,hardware.getMessage() , Toast.LENGTH_SHORT).show();
+                            loadActivity();
+                        }
                     }
                 });
             }
