@@ -171,7 +171,7 @@ public class HardwareListActivity extends BaseActivity {
                     @Override
                     public void run() {
                         // once the results arrive, update the arrayadapter
-                        ArrayAdapter arrayAdapter = new HardwareAdapter(HardwareListActivity.this, hardwares, gridView);
+                        ArrayAdapter arrayAdapter = new HardwareAdapter(HardwareListActivity.this, hardwares, gridView, raspberry);
                         gridView.setAdapter(arrayAdapter);
                     }
                 });
@@ -231,7 +231,7 @@ public class HardwareListActivity extends BaseActivity {
                             if (hardware.getObject() != null) {
                                 hardwares.add(hardware.getObject());
                             }
-                            ArrayAdapter arrayAdapter = new HardwareAdapter(HardwareListActivity.this, hardwares, gridView);
+                            ArrayAdapter arrayAdapter = new HardwareAdapter(HardwareListActivity.this, hardwares, gridView, raspberry);
                             gridView.setAdapter(arrayAdapter);
                         }
                         else {

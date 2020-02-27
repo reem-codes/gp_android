@@ -91,19 +91,18 @@ public class LoginActivity extends AppCompatActivity {
         if(!isEmailValid(email))
         {
             Toast.makeText(LoginActivity.this, "email is incorrect", Toast.LENGTH_SHORT).show();
+            return;
         }
         if(password.length() == 0){
             Toast.makeText(LoginActivity.this, "You must enter a password", Toast.LENGTH_SHORT).show();
+            return;
         }
-        else {
-            /** when using any thing that require permissions, wrap the method with a try catch**/
-            try {
-                postLoginApi(url, email, password);
-            } catch (Exception e) {
-                Toast.makeText(LoginActivity.this, "Login Failed, please check network and try again", Toast.LENGTH_SHORT).show();
-            }
+        /** when using any thing that require permissions, wrap the method with a try catch**/
+        try {
+            postLoginApi(url, email, password);
+        } catch (Exception e) {
+            Toast.makeText(LoginActivity.this, "Login Failed, please check network and try again", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     void postLoginApi(String url, String email, String password) throws IOException {

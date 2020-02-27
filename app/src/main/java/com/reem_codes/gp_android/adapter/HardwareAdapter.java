@@ -24,6 +24,7 @@ import com.reem_codes.gp_android.activity.NewHardwareActivity;
 import com.reem_codes.gp_android.activity.RaspberryActivity;
 import com.reem_codes.gp_android.model.Base;
 import com.reem_codes.gp_android.model.Hardware;
+import com.reem_codes.gp_android.model.Raspberry;
 
 import java.io.IOException;
 import java.util.List;
@@ -40,14 +41,20 @@ public class HardwareAdapter extends ArrayAdapter<Hardware> {
     Context context;
     static Hardware hardware;
     GridView gridView;
+    Raspberry raspberry;
+
     public HardwareAdapter(Context context, List<Hardware> hardwares, GridView gridView) {
         super(context, R.layout.hardware_item_adapter, hardwares);
         this.context = context;
         this.gridView = gridView;
-
     }
 
-    @NonNull
+    public HardwareAdapter(Context context, List<Hardware> hardwares, GridView gridView, Raspberry raspberry) {
+        this(context, hardwares, gridView);
+        this.raspberry = raspberry;
+    }
+
+        @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(getContext());

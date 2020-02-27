@@ -68,6 +68,7 @@ public class CommandListActivity extends BaseActivity {
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), NewCommandActivity.class);
                 i.putExtra("hardware", hardware.getName());
+                i.putExtra("status", hardware.isStatus());
                 startActivityForResult(i, LAUNCH_ADD_COMMAND);
             }
         });
@@ -123,7 +124,7 @@ public class CommandListActivity extends BaseActivity {
                     @Override
                     public void run() {
                         // update array adapter
-                        ArrayAdapter arrayAdapter = new CommandAdapter(CommandListActivity.this, commands, listView);
+                        ArrayAdapter arrayAdapter = new CommandAdapter(CommandListActivity.this, commands, listView, hardware);
                         listView.setAdapter(arrayAdapter);
 
                     }
@@ -279,7 +280,7 @@ public class CommandListActivity extends BaseActivity {
                             if(command.getObject().getSchedule() != null){
                                 commands.add(command.getObject());
                             }
-                            ArrayAdapter arrayAdapter = new CommandAdapter(CommandListActivity.this, commands, listView);
+                            ArrayAdapter arrayAdapter = new CommandAdapter(CommandListActivity.this, commands, listView, hardware);
                             listView.setAdapter(arrayAdapter);
                         } else {
                             Toast.makeText(CommandListActivity.this,command.getMessage() , Toast.LENGTH_SHORT).show();

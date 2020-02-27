@@ -23,6 +23,7 @@ import com.reem_codes.gp_android.activity.HardwareListActivity;
 import com.reem_codes.gp_android.activity.NewCommandActivity;
 import com.reem_codes.gp_android.model.Base;
 import com.reem_codes.gp_android.model.Command;
+import com.reem_codes.gp_android.model.Hardware;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,12 +41,15 @@ public class CommandAdapter extends ArrayAdapter<Command> {
     Context context;
     static Command command;
     ListView listView;
+    Hardware hardware;
     public CommandAdapter(Context context, List<Command> commands, ListView listView) {
         super(context, R.layout.command_item_adapter, commands);
         this.context = context;
         this.listView = listView;
-
-
+    }
+    public CommandAdapter(Context context, List<Command> commands, ListView listView, Hardware hardware) {
+        this(context, commands, listView);
+        this.hardware = hardware;
     }
 
     @NonNull
@@ -157,7 +161,8 @@ public class CommandAdapter extends ArrayAdapter<Command> {
                 command = getItem(position);
                 Intent intent = new Intent(context, NewCommandActivity.class);
                 intent.putExtra("isEdit", true);
-                intent.putExtra("hardware", HardwareListActivity.hardwares.get(command.getHardware_id()).getName());
+                intent.putExtra("hardware", hardware.getName());
+                intent.putExtra("status", hardware.isStatus());
                 Gson gson = new Gson();
                 intent.putExtra("command", gson.toJson(command));
                 System.out.println("GPDEBUG " + gson.toJson(command));

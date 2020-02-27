@@ -92,9 +92,6 @@ public class ResponseService extends Service {
             TypeToken<Login> token = new TypeToken<Login>(){};
             currentLoggedUser = gson.fromJson(login, token.getType());
 
-        } else {
-            Intent intent = new Intent(context, LoginActivity.class);
-            startActivity(intent);
         }
     }
 

@@ -60,18 +60,20 @@ public class RegisterActivity extends AppCompatActivity {
         if(!isEmailValid(email))
         {
             Toast.makeText(RegisterActivity.this, "email is incorrect", Toast.LENGTH_SHORT).show();
+            return;
         }
         if(password.length() == 0){
             Toast.makeText(RegisterActivity.this, "You must enter a password", Toast.LENGTH_SHORT).show();
+            return;
         }
-        else {
-            /** when using any thing that require permissions, wrap the method with a try catch**/
-            try {
-                postUserApi(url, email, password);
-            } catch (Exception e) {
-                Toast.makeText(RegisterActivity.this, "Login Failed, please check network and try again", Toast.LENGTH_SHORT).show();
-            }
+
+        /** when using any thing that require permissions, wrap the method with a try catch**/
+        try {
+            postUserApi(url, email, password);
+        } catch (Exception e) {
+            Toast.makeText(RegisterActivity.this, "Login Failed, please check network and try again", Toast.LENGTH_SHORT).show();
         }
+
 
     }
 
