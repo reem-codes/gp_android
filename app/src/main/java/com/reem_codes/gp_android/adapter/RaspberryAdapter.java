@@ -123,7 +123,6 @@ public class RaspberryAdapter extends ArrayAdapter<Raspberry> {
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                raspberry = getItem(position);
                 m_Text ="";
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle("Change name");
@@ -138,7 +137,7 @@ public class RaspberryAdapter extends ArrayAdapter<Raspberry> {
                     public void onClick(DialogInterface dialog, int which) {
                         m_Text = input.getText().toString();
                         try {
-
+                            raspberry = getItem(position);
                             String url = context.getString(R.string.api_url) + "/raspberry/"+raspberry.getId();
                             String json = String.format("{\"name\": \"%s\"}", m_Text);
 

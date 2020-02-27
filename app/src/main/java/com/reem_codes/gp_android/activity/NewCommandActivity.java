@@ -46,7 +46,6 @@ public class NewCommandActivity extends Activity {
         isEdit = intent.getBooleanExtra("isEdit", false);
         if(name != null){
             ((TextView) findViewById(R.id.hardware_name)).setText(name);
-            ((TextView) findViewById(R.id.hw_config)).setText(status? "ON": "OFF");
         }
         if(isEdit) {
             ((TextView) findViewById(R.id.textView)).setText("Edit Command");

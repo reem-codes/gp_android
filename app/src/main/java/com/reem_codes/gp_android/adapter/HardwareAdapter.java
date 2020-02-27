@@ -151,7 +151,7 @@ public class HardwareAdapter extends ArrayAdapter<Hardware> {
                 hardware = getItem(position);
                 Intent intent = new Intent(context, NewHardwareActivity.class);
                 intent.putExtra("isEdit", true);
-                intent.putExtra("raspberry", RaspberryActivity.raspberries.get(hardware.getRaspberry_id()).getName());
+                intent.putExtra("raspberry", raspberry.getName());
                 Gson gson = new Gson();
                 intent.putExtra("hardware", gson.toJson(hardware));
                 System.out.println("GPDEBUG " + gson.toJson(hardware));
