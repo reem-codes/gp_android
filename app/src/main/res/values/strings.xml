@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">GpSmartHomeAndroid</string>
+    <string name="app_name">My Smart Home</string>
     <string name="api_url">https://gp.reem-codes.com</string>
 </resources>
